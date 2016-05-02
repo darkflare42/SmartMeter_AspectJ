@@ -1,0 +1,11 @@
+The System is comprised of 3 major components
+1) The Database which holds permanent information regarding the meters
+2) The management software which allows the user to interact with the DB and meters with ease
+3) A meter simulator - this is a simple program which just simulates interaction with an actual meter, not much else
+We should also probably do some simple GUI but that should be the last part, the base has to be created first
+
+Supposedly the interaction with the DB should be using a module named DBInteraction - just a static class
+that allows reading and writing values to the DB, maybe running some queries also
+
+Supposedly the interaction with the meter simulator should also have its own module named MeterComm - again a static
+class that interacts with the simulator using a simple UDP protocol
