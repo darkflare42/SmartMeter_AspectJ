@@ -35,5 +35,13 @@ public class DBComm {
 
     }
 
+    public static boolean login(String username, String password){
+        //TODO: Maybe we can merge this and the getUser method together
+    }
+
+    public static User getUser(String username){
+
+    }
+
 
 }

@@ -2,19 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by Or Keren on 05/05/2016.
+ * Created by Or Keren on 06/05/2016.
  */
-public class MainMenu extends JFrame{
+public class CustomerMainMenu extends JFrame {
+    private JButton viewMetersButton;
+    private JButton viewMonthlyBillButton;
     private JPanel rootPanel;
-    private JButton button1;
-    private JButton button2;
-    private JButton button3;
-    private JButton button4;
 
-    public MainMenu(){
-        super("MainMenu");
+    public CustomerMainMenu(){
+        super("CustomerMainMenu");
         setContentPane(rootPanel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

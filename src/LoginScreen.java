@@ -7,17 +7,16 @@ import java.awt.event.ActionListener;
  * Created by Or Keren on 05/05/2016.
  */
 public class LoginScreen extends JFrame{
-    private JPasswordField passwordField1;
+    private JPasswordField password;
     private JPanel rootPanel;
     private JButton loginButton;
-    private JTextField textField1;
+    private JTextField userName;
 
     public LoginScreen(){
         super("LoginScreen");
         setContentPane(rootPanel);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
-        //setVisible(true);
 
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -33,9 +32,12 @@ public class LoginScreen extends JFrame{
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-                MainMenu m = new MainMenu();
+                if(DBComm.login(userName.getText(), new String(password.getPassword()))){
+                    MainTest.currentUser = DBComm.getUser(userName.getText());
+                    MainTest.currentUser.openMainMenu(); //This opens up the main menu that is appropriate for the current user type
+                    setVisible(false);
+                    dispose();
+                }
             }
         });
     }
