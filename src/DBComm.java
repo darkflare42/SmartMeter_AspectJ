@@ -37,10 +37,11 @@ public class DBComm {
 
     public static boolean login(String username, String password){
         //TODO: Maybe we can merge this and the getUser method together
+        return true;
     }
 
     public static User getUser(String username){
-
+        return null;
     }
 
 
