@@ -163,6 +163,32 @@ public class DBComm {
     }
 
 
+    public static LinkedList<PowerMeter> getAllMetersByCity(String city){
+        LinkedList<PowerMeter> allMeters =getAllMeters();
+        for(int i=0; i<allMeters.size(); i++){
+            if(!allMeters.get(i).getCurrentLocation().getCity().equals(city)){
+                allMeters.remove(i);
+            }
+        }
+        return allMeters;
+
+
+    }
+
+
+    public static LinkedList<PowerMeter> getAllMeterdByUserId(int userId){
+        LinkedList<PowerMeter> allMeters =getAllMeters();
+        for(int i=0; i<allMeters.size(); i++){
+            if(allMeters.get(i).getCostumerID()!= userId){
+                allMeters.remove(i);
+            }
+        }
+        return allMeters;
+
+
+    }
+
+
 
     public static LinkedList<PowerMeter> getAllMeters(){
         Connection conn = null;
@@ -369,6 +395,7 @@ public class DBComm {
             ResultSet t=st.executeQuery(query);
             LinkedList<Customer>  allCust= new LinkedList<Customer>();
             while(t.next()) {
+                System.out.println(t.getInt(1));
                 Customer customer = getCustumerById(t.getInt(1));
                 allCust.add(customer);
             }
@@ -514,7 +541,6 @@ public class DBComm {
 
         return null;
     }
-
 
 
 }

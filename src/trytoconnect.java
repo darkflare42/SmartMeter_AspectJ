@@ -8,6 +8,8 @@ import Engine.PowerMeter;
 
 import java.sql.*;
 import java.util.Date;
+import java.util.LinkedList;
+
 import Engine.*;
 
 
@@ -21,10 +23,18 @@ public class trytoconnect {
         Address ddd= new Address("IL","no","maale","shaham",12);
         Customer cs= new Customer("omer","king",35,ddd);
        // DBComm.addNewCustomer(cs);
-        PowerMeter pm =new PowerMeter(55,true,d,d,10,15,20,cs);
-        PowerMeter g=DBComm.getMeterById(55);
-        System.out.println("sfdsdf");
-        System.out.print(g.getCostumerID());
+        //PowerMeter pm2 =new PowerMeter(56,true,d,d,13,55,250,cs);
+        //DBComm.addNewMeter(pm2);
+
+        //PowerMeter g=DBComm.getMeterById(55);
+        LinkedList<PowerMeter> omer = DBComm.getAllMeters();
+        if(omer==null){
+            System.out.println("sdfsdf");
+        }
+        for(int i=0;i<2;i++) {
+            System.out.println(omer.get(i).getID());
+        }
+        //System.out.print(g.getCostumerID());
     }
 
     public static void insertDataLogIn(int userID, String userName, String password) {
