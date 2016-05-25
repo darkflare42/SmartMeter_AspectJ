@@ -1,17 +1,18 @@
+package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by Or Keren on 05/05/2016.
+ * Created by Or Keren on 06/05/2016.
  */
-public class AdminMainMenu extends JFrame{
-    private JPanel rootPanel;
+public class CustomerMainMenu extends JFrame {
     private JButton viewMetersButton;
-    private JButton viewCustomersButton;
-    private JButton viewTechniciansButton;
+    private JButton viewMonthlyBillButton;
+    private JPanel rootPanel;
 
-    public AdminMainMenu(){
-        super("AdminMainMenu");
+    public CustomerMainMenu(){
+        super("CustomerMainMenu");
         setContentPane(rootPanel);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();

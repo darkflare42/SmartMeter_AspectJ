@@ -1,3 +1,5 @@
+package Engine;
+
 import java.util.LinkedList;
 
 /** This class is a mockup of the communication application.
@@ -13,7 +15,7 @@ public class MeterCommunication implements Runnable{
      * The constructor starts by getting all the current meters from the DB
      */
     public MeterCommunication(){
-        //m_currMeters = new LinkedList<>(DBComm.getAllActiveMeters());
+        //m_currMeters = new LinkedList<>(Engine.DBComm.getAllActiveMeters());
     }
 
 
@@ -25,7 +27,7 @@ public class MeterCommunication implements Runnable{
 
         for(PowerMeter m : m_currMeters){
             int watt = m.readWattage();
-            //DBComm.updateMeterReading(m.getID, watt);
+            //Engine.DBComm.updateMeterReading(m.getID, watt);
             //TODO: Add function to DBCOMM to update the current reading of a meter (id & reading)
         }
 

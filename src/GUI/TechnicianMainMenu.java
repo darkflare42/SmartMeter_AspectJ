@@ -1,15 +1,17 @@
+package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * Created by Or Keren on 06/05/2016.
  */
-public class CustomerMainMenu extends JFrame {
+public class TechnicianMainMenu extends JFrame {
+    private JButton addMeterButton;
     private JButton viewMetersButton;
-    private JButton viewMonthlyBillButton;
     private JPanel rootPanel;
 
-    public CustomerMainMenu(){
+    public TechnicianMainMenu(){
         super("CustomerMainMenu");
         setContentPane(rootPanel);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -25,5 +27,4 @@ public class CustomerMainMenu extends JFrame {
 
         setVisible(true);
     }
-
 }
