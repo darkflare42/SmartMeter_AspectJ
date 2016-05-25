@@ -33,7 +33,7 @@ public class MeterCommunication implements Runnable{
 
         //Go over the list of meters and call "readMeter" function on it
         try {
-            Thread.sleep(MainTest.METER_INTERVAL);
+            Thread.sleep(Engine.MainTest.METER_INTERVAL);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -55,4 +55,11 @@ public class MeterCommunication implements Runnable{
     public void removeMeter(PowerMeter m){
         m_currMeters.remove(m); //TODO: Check that this works, maybe we need to search via ID
     }
+
+    public static void main(String[] arg){
+        System.out.print("hello world");
+
+    }
 }
+
+

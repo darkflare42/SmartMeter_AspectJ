@@ -31,6 +31,21 @@ public class PowerMeter {
         m_currCustomer = customer;
     }
 
+    public PowerMeter(int id,boolean active, Date init_date, Date lastRead, int maxWattage, int totalWattage, int currentWattage, Customer cust){
+        this.m_id = id;
+        this.active= active;
+        this.m_startDate= init_date;
+        this.m_lastReadDate = lastRead;
+        this.m_maxWattage = maxWattage;
+        this. m_currWattageReading = currentWattage;
+        this.m_totalReading = totalWattage;
+        this.m_currCustomer =cust;
+
+
+
+
+    }
+
 
     public Date getLastReadDate() {
         return m_lastReadDate;

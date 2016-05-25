@@ -2,8 +2,13 @@
  * Created by Omer on 18/05/2016.
  */
 
+import Engine.Address;
+import Engine.Customer;
+import Engine.PowerMeter;
+
 import java.sql.*;
 import java.util.Date;
+import Engine.*;
 
 
 public class trytoconnect {
@@ -12,9 +17,14 @@ public class trytoconnect {
     // Notice, do not import com.mysql.jdbc.*
 // or you will have problems!
     public static void main(String[] args) throws  Exception{
-        java.util.Date date = new Date();
-        ResultSet d=getDataFromBillByUserId(5);
-
+        Date d=new Date();
+        Address ddd= new Address("IL","no","maale","shaham",12);
+        Customer cs= new Customer("omer","king",35,ddd);
+       // DBComm.addNewCustomer(cs);
+        PowerMeter pm =new PowerMeter(55,true,d,d,10,15,20,cs);
+        PowerMeter g=DBComm.getMeterById(55);
+        System.out.println("sfdsdf");
+        System.out.print(g.getCostumerID());
     }
 
     public static void insertDataLogIn(int userID, String userName, String password) {

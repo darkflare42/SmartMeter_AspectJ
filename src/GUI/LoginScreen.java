@@ -1,4 +1,5 @@
 package GUI;
+import Engine.*;
 
 import javax.swing.*;
 import java.awt.*;
