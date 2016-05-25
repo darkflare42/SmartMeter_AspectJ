@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Created by Or Keren on 05/05/2016.
@@ -129,26 +130,126 @@ public class DBComm {
 
     }
 
-    public static void addMeterToCustomer(PowerMeter meter, Customer customer){
+    public static void addMeter(PowerMeter meter, Customer customer){
 
     }
 
-    public static void removeMeterFromCustomer(PowerMeter meter){
 
-
-    }
 
     public static void deleteCustomer(Customer customer){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = " DELETE FROM user WHERE user_id="+customer.getID();
+
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+
+            preparedStmt.execute();
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+
+
 
     }
 
-    public static void deltePowerMeter(PowerMeter meter){
+    public static void deltePowerMeter(PowerMeter meter) {
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = " DELETE FROM meter WHERE meter_id=" + meter.getID();
 
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+
+            preparedStmt.execute();
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
 
 
     }
+
+
+    //todo getAllActieMeters, getallInActiveMeters
+
+
+
+    public static PowerMeter getMeterById(int meterId){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = "SELECT meter_id FROM meter WHERE meter_id="+meterId;
+
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery(query );
+            // Do something with the Connection
+            int userId= d.getInt(1);
+            boolean active = d.getBoolean(3);
+            Date init_Date = d.getDate(4);
+            Date lastRead = d.getDate(5);
+            int maxWattate = d.getInt(6);
+            int totalWattage = d.get
+
+            while (d.next()){
+                PowerMeter meter = getMeterById(d.getInt(1));
+                meters.add(meter);
+            }
+            return meters;
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+
+        return null;
+    }
+
 
     public static LinkedList<PowerMeter> getAllMeters(){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery("SELECT meter_id FROM  meter" );
+            // Do something with the Connection
+            LinkedList<PowerMeter> meters = new LinkedList<PowerMeter>();
+            while (d.next()){
+                PowerMeter meter = getMeterById(d.getInt(1));
+                meters.add(meter);
+            }
+            return meters;
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+
+
+
+        return null;
+
 
     }
 
