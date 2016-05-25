@@ -28,12 +28,104 @@ public class DBComm {
         }
     }
 
-
+    /**
+     * meter columns:
+     * user_id
+     * meter_id
+     * active
+     * init_date
+     * last_read
+     * max_wattage
+     * total_wattage
+     * current_wattage
+     * @param newMeter
+     */
     public static void addNewMeter(PowerMeter newMeter){
 
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = " insert into login (user_id, meter_id, active, init_date, last_read, max_wattage, total_wattage, current_wattage)"
+                    + " values (?, ?, ?, ? , ?, ?, ?, ?)";
+
+            Object timestamp = new java.sql.Timestamp(newMeter.getStartOperationDate().getTime());
+
+
+            Object lastReadStamp = new java.sql.Timestamp(newMeter.getLastReadDate().getTime());
+
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, newMeter.getCostumerID());
+            preparedStmt.setInt(2, newMeter.getID());
+            preparedStmt.setBoolean(3, newMeter.getIsActive());
+            preparedStmt.setObject(4, timestamp);
+            preparedStmt.setObject(5, lastReadStamp);
+            preparedStmt.setInt(6, newMeter.getMaxWattage());
+            preparedStmt.setInt(7, newMeter.getTotalReading());
+            preparedStmt.setInt(8, newMeter.getCurrentMonthlyReading());
+
+            // execute the preparedstatement
+            preparedStmt.execute();
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
     }
 
+
+    /**
+     * user table:
+     * used_id
+     * first_name
+     * last_name
+     * country
+     * district
+     * city
+     * house_number
+     * user_type
+     * @param newCustomer
+     */
     public static void addNewCustomer(Customer newCustomer){
+
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = " insert into login (user_id, first_name, last_name, country, district, city, house_number, user_type, street)"
+                    + " values (?, ?, ?, ? , ?, ?, ?, ?, ?)";
+
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, newCustomer.getID());
+            preparedStmt.setString(2, newCustomer.getFirstName());
+            preparedStmt.setString(3, newCustomer.getSurname());
+            preparedStmt.setString(4, newCustomer.getAddress().getCountry());
+            preparedStmt.setString(5, newCustomer.getAddress().getDistrict());
+            preparedStmt.setString(6, newCustomer.getAddress().getCity());
+            preparedStmt.setInt(7,newCustomer.getAddress().getHouseNumber());
+            preparedStmt.setInt(8, 1); //TODO determinate how user_type wil represent.
+            preparedStmt.setString(9,newCustomer.getAddress().getStreetName());
+
+            // execute the preparedstatement
+            preparedStmt.execute();
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+
+
+
+
 
     }
 
@@ -41,7 +133,8 @@ public class DBComm {
 
     }
 
-    public static void removeMeterFromCustomer(PowerMeter meter, Customer customer){
+    public static void removeMeterFromCustomer(PowerMeter meter){
+
 
     }
 
@@ -51,9 +144,11 @@ public class DBComm {
 
     public static void deltePowerMeter(PowerMeter meter){
 
+
+
     }
 
-    public static void getAllMeters(){
+    public static LinkedList<PowerMeter> getAllMeters(){
 
     }
 

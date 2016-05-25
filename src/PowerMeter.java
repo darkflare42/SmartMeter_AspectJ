@@ -5,14 +5,14 @@ import java.util.Date;
  */
 public class PowerMeter {
 
-    private long m_id;
+    private int m_id;
+    private boolean active;
     private Date m_startDate;
     private Date m_lastReadDate;
     private int m_maxWattage;
     private Customer m_currCustomer;
-
     private int m_currMonthlyReading;
-    private long m_totalReading;
+    private int m_totalReading;
 
 
 
@@ -41,7 +41,7 @@ public class PowerMeter {
         return m_currMonthlyReading;
     }
 
-    public long getTotalReading(){
+    public int getTotalReading(){
         return m_totalReading;
     }
 
@@ -49,8 +49,12 @@ public class PowerMeter {
         return m_startDate;
     }
 
-    public long getID() {
+    public int getID() {
         return m_id;
+    }
+
+    public boolean getIsActive(){
+        return active;
     }
 
     public int getMaxWattage() {
@@ -59,6 +63,10 @@ public class PowerMeter {
 
     public void setMaxWattage(int m_maxWattage) {
         this.m_maxWattage = m_maxWattage;
+    }
+
+    public int getCostumerID(){
+        return m_currCustomer.getID();
     }
 
     public Address getCurrentLocation(){

@@ -5,10 +5,10 @@ public class Customer extends User {
 
     private String m_fname;
     private String m_lname;
-    private long m_id;
+    private int m_id;
     private Address m_address;
 
-    public Customer(String firstName, String surname, long id, Address currentAddress){
+    public Customer(String firstName, String surname, int id, Address currentAddress){
         m_fname = firstName;
         m_lname = surname;
         m_id = id;
@@ -23,7 +23,7 @@ public class Customer extends User {
         return m_lname;
     }
 
-    public long getID() {
+    public int getID() {
         return m_id;
     }
 
