@@ -11,8 +11,9 @@ public class PowerMeter {
     private Date m_lastReadDate;
     private int m_maxWattage;
     private Customer m_currCustomer;
-    private int m_currMonthlyReading;
+    private int m_currWattageReading;
     private int m_totalReading;
+
 
 
 
@@ -35,10 +36,6 @@ public class PowerMeter {
 
     public void setLastReadDate(Date m_lastReadDate) {
         this.m_lastReadDate = m_lastReadDate;
-    }
-
-    public int getCurrentMonthlyReading() {
-        return m_currMonthlyReading;
     }
 
     public int getTotalReading(){
@@ -75,6 +72,14 @@ public class PowerMeter {
 
     public void resetMaxWattage(){
         setMaxWattage(0);
+    }
+
+    /**
+     * MOCK-UP of the actual reading function. This function just gets the current reading and adds one to it
+     * @return The current wattage of the meter
+     */
+    public int readWattage(){
+        return ++m_currWattageReading;
     }
 
 
