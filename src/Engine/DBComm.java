@@ -543,4 +543,253 @@ public class DBComm {
     }
 
 
+    public static int getCityTaarif(String City){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            insertDataLogIn(324234, "Dgdg", "dfg");
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery("SELECT * FROM  tariff_city WHERE city_name=" + city);
+            d.next();
+            return d.getInt("tariff");
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendoreError: " + ex.getErrorCode());
+        }
+
+        return -1;
+
+    }
+
+
+
+
+    public static int getCountryTaarif(String country){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            insertDataLogIn(324234, "Dgdg", "dfg");
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery("SELECT * FROM  tariff_country WHERE country_name=" + country);
+            d.next();
+            return d.getInt("tariff");
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendoreError: " + ex.getErrorCode());
+        }
+
+        return -1;
+
+    }
+
+
+
+    public static int getDistrictTaarif(String district){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            insertDataLogIn(324234, "Dgdg", "dfg");
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery("SELECT * FROM  tariff_district WHERE district_name=" + district);
+            d.next();
+            return d.getInt("tariff");
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendoreError: " + ex.getErrorCode());
+        }
+
+        return -1;
+
+    }
+
+
+
+    public static void insertTarrifCity(String city, int cityID, int taarif) {
+
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = " insert into tariff_city (city_name, city_id, tariff)"
+                    + " values (?, ?, ?)";
+
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, city);
+            preparedStmt.setInt(2, cityID);
+            preparedStmt.setInt(3, taarif);
+            // execute the preparedstatement
+            preparedStmt.execute();
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+    }
+
+
+
+
+
+
+    public static void insertTarrifCountry(String country, int coountryID, int taarif) {
+
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = " insert into tariff_country (country_name, country_id, tariff)"
+                    + " values (?, ?, ?)";
+
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, country);
+            preparedStmt.setInt(2, coountryID);
+            preparedStmt.setInt(3, taarif);
+            // execute the preparedstatement
+            preparedStmt.execute();
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+    }
+
+
+    public static void insertTarrifDistrict(String district, int districtID, int taarif) {
+
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = " insert into tariff_district (district_name, district_id, tariff)"
+                    + " values (?, ?, ?)";
+
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, district);
+            preparedStmt.setInt(2, districtID);
+            preparedStmt.setInt(3, taarif);
+            // execute the preparedstatement
+            preparedStmt.execute();
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+    }
+
+
+
+
+
+
+    public static void updateCityTariff(String city,int newTariff){
+
+
+
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+
+            String query = "UPDATE tariff_city  SET tariff="+newTariff+" WHERE city_name="+city;
+
+            Statement st = conn.createStatement();
+            st.executeQuery(query);
+            // Do something with the Connection
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+
+    }
+
+
+    public static void updateDistrictTariff(String district,int newTariff){
+
+
+
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+
+            String query = "UPDATE tariff_district  SET tariff="+newTariff+" WHERE district_name="+district;
+
+            Statement st = conn.createStatement();
+            st.executeQuery(query);
+            // Do something with the Connection
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+
+
+
+    public static void updateCountryTariff(String country,int newTariff){
+
+
+
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+
+            String query = "UPDATE tariff_country  SET tariff="+newTariff+" WHERE country_name="+country;
+
+            Statement st = conn.createStatement();
+            st.executeQuery(query);
+            // Do something with the Connection
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+
+    }
+
+
+
+
+
+
 }
