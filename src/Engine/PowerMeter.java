@@ -8,7 +8,7 @@ import java.util.Date;
 public class PowerMeter {
 
     private int m_id;
-    private boolean active;
+    private boolean m_active;
     private Date m_startDate;
     private Date m_lastReadDate;
     private int m_maxWattage;
@@ -68,7 +68,7 @@ public class PowerMeter {
     }
 
     public boolean getIsActive(){
-        return active;
+        return m_active;
     }
 
     public int getMaxWattage() {
@@ -97,6 +97,18 @@ public class PowerMeter {
      */
     public int readWattage(){
         return ++m_currWattageReading;
+    }
+
+    public void setActive(){
+        m_active = true;
+    }
+
+    public void setInactive(){
+        m_active = false;
+    }
+
+    public int getCurrentWattage(){
+        return m_currWattageReading;
     }
 
 

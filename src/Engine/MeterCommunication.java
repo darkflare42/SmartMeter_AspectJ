@@ -1,6 +1,7 @@
 package Engine;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /** This class is a mockup of the communication application.
  * It has a local list of meters, which it iterates over every INTERVAL seconds
@@ -15,7 +16,7 @@ public class MeterCommunication implements Runnable{
      * The constructor starts by getting all the current meters from the DB
      */
     public MeterCommunication(){
-        //m_currMeters = new LinkedList<>(Engine.DBComm.getAllActiveMeters());
+        m_currMeters = new LinkedList<>();
     }
 
 
@@ -25,15 +26,11 @@ public class MeterCommunication implements Runnable{
     @Override
     public void run() {
 
-        for(PowerMeter m : m_currMeters){
-            int watt = m.readWattage();
-            //Engine.DBComm.updateMeterReading(m.getID, watt);
-            //TODO: Add function to DBCOMM to update the current reading of a meter (id & reading)
-        }
+        readAllMeters();
 
         //Go over the list of meters and call "readMeter" function on it
         try {
-            Thread.sleep(Engine.MainTest.METER_INTERVAL);
+            Thread.sleep(MainTest.METER_INTERVAL);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -56,10 +53,10 @@ public class MeterCommunication implements Runnable{
         m_currMeters.remove(m); //TODO: Check that this works, maybe we need to search via ID
     }
 
-    public static void main(String[] arg){
-        System.out.print("hello world");
+    public void readAllMeters(){
+        //Engine.DBComm.updateMeterReading(m.getID, watt);
+        m_currMeters.forEach(PowerMeter::readWattage);
+        //TODO: Add function to DBCOMM to update the current reading of a meter (id & reading)
 
     }
 }
-
-

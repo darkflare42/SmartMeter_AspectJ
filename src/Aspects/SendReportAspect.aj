@@ -5,7 +5,7 @@ package Aspects;
  */
 public aspect SendReportAspect {
 
-    pointcut UserLeft();
+    pointcut CustomerDisconnected();
 
     pointcut UserRequestedReport(); //TODO: Not really sure this is needed
 

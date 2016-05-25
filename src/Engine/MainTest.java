@@ -12,10 +12,15 @@ public class MainTest {
 
     public static User currentUser;
 
+    public static MeterCommunication communicator;
+
     public static void main(String[] args) {
         //LoginScreen ls = new LoginScreen();
+        communicator = new MeterCommunication();
+        new Thread(communicator).start();
         DBComm.init();
-        new Thread(new MeterCommunication()).start();
+        //TODO: Have to make sure that somewhere after the communicator we read all the values
+
 
     }
 }
