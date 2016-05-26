@@ -21,20 +21,11 @@ public class trytoconnect {
     public static void main(String[] args) throws  Exception{
         Date d=new Date();
         Address ddd= new Address("IL","no","maale","shaham",12);
-        Customer cs= new Customer("omer","king",35,ddd);
+        Customer cs= new Customer("omer","king",100,ddd);
        // DBComm.addNewCustomer(cs);
-        //PowerMeter pm2 =new PowerMeter(56,true,d,d,13,55,250,cs);
-        //DBComm.addNewMeter(pm2);
+        PowerMeter pm2 =new PowerMeter(56,false,d,d,13,55,250,cs);
+        DBComm.updatemeter(pm2);
 
-        //PowerMeter g=DBComm.getMeterById(55);
-        LinkedList<PowerMeter> omer = DBComm.getAllMeters();
-        if(omer==null){
-            System.out.println("sdfsdf");
-        }
-        for(int i=0;i<2;i++) {
-            System.out.println(omer.get(i).getID());
-        }
-        //System.out.print(g.getCostumerID());
     }
 
     public static void insertDataLogIn(int userID, String userName, String password) {

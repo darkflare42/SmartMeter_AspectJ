@@ -1,8 +1,9 @@
 package Engine;
-
+import java.sql.Date;
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
+//import java.util.Date;
+
 
 /**
  * Created by Or Keren on 05/05/2016.
@@ -222,7 +223,10 @@ public class DBComm {
     }
 
 
-
+    /**
+     * pass debugging
+     * @param meter
+     */
     public static void updatemeter(PowerMeter meter){
 
 
@@ -233,12 +237,28 @@ public class DBComm {
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
 
-            String query = "UPDATE meter  SET active="+meter.getIsActive()+" , last_read="+
-                    meter.getLastReadDate()+" , max_wattage="+meter.getMaxWattage()+
-                    " ,total_wattage="+meter.getTotalReading()+" , current_wattage="+meter.readWattage();
+            String query = "UPDATE meter  SET user_id=? , active=?, init_date=?, last_read=?, max_wattage=?, total_wattage=?, current_wattage = ? Where meter_id=?";
 
-            Statement st = conn.createStatement();
-            st.executeQuery(query);
+            Object lastReadStamp = new java.sql.Timestamp(meter.getLastReadDate().getTime());
+            Object initStamp = new java.sql.Timestamp(meter.getStartOperationDate().getTime());
+
+
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setInt(1,meter.getCostumerID());
+            ps.setBoolean(2,meter.getIsActive());
+            ps.setObject(3,initStamp);
+            ps.setObject(4,lastReadStamp);
+            ps.setInt(5, meter.getMaxWattage());
+            ps.setInt(6, meter.getTotalReading());
+            ps.setInt(7, meter.readWattage());
+            ps.setInt(8,meter.getID());
+
+            ps.executeUpdate();
+
+
+
+
             // Do something with the Connection
 
         } catch (SQLException ex) {
@@ -475,7 +495,6 @@ public class DBComm {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
-            insertDataLogIn(324234, "Dgdg", "dfg");
             Statement st = conn.createStatement();
             ResultSet d = st.executeQuery("SELECT * FROM  login WHERE user_id=" + userId);
             // Do something with the Connection
@@ -527,7 +546,6 @@ public class DBComm {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
-            insertDataLogIn(324234, "Dgdg", "dfg");
             Statement st = conn.createStatement();
             ResultSet d = st.executeQuery("SELECT * FROM  bill WHERE user_id=" + userId);
             // Do something with the Connection
@@ -542,14 +560,17 @@ public class DBComm {
         return null;
     }
 
-
-    public static int getCityTaarif(String City){
+    /**
+     * pass debugging
+     * @param city
+     * @return
+     */
+    public static int getCityTaarif(String city){
         Connection conn = null;
         try {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
-            insertDataLogIn(324234, "Dgdg", "dfg");
             Statement st = conn.createStatement();
             ResultSet d = st.executeQuery("SELECT * FROM  tariff_city WHERE city_name=" + city);
             d.next();
@@ -567,15 +588,17 @@ public class DBComm {
     }
 
 
-
-
+    /**
+     * pass debugging
+     * @param country
+     * @return
+     */
     public static int getCountryTaarif(String country){
         Connection conn = null;
         try {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
-            insertDataLogIn(324234, "Dgdg", "dfg");
             Statement st = conn.createStatement();
             ResultSet d = st.executeQuery("SELECT * FROM  tariff_country WHERE country_name=" + country);
             d.next();
@@ -593,14 +616,17 @@ public class DBComm {
     }
 
 
-
+    /**
+     * pass debugging
+     * @param district
+     * @return
+     */
     public static int getDistrictTaarif(String district){
         Connection conn = null;
         try {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
-            insertDataLogIn(324234, "Dgdg", "dfg");
             Statement st = conn.createStatement();
             ResultSet d = st.executeQuery("SELECT * FROM  tariff_district WHERE district_name=" + district);
             d.next();
@@ -618,7 +644,12 @@ public class DBComm {
     }
 
 
-
+    /**
+     * pass dubugging.
+     * @param city
+     * @param cityID
+     * @param taarif
+     */
     public static void insertTarrifCity(String city, int cityID, int taarif) {
 
         Connection conn = null;
@@ -646,10 +677,12 @@ public class DBComm {
     }
 
 
-
-
-
-
+    /**
+     * pass debugging.
+     * @param country
+     * @param coountryID
+     * @param taarif
+     */
     public static void insertTarrifCountry(String country, int coountryID, int taarif) {
 
         Connection conn = null;
@@ -676,7 +709,12 @@ public class DBComm {
         }
     }
 
-
+    /**
+     * pass debugging
+     * @param district
+     * @param districtID
+     * @param taarif
+     */
     public static void insertTarrifDistrict(String district, int districtID, int taarif) {
 
         Connection conn = null;
@@ -704,10 +742,11 @@ public class DBComm {
     }
 
 
-
-
-
-
+    /**
+     * pass debugging
+     * @param city
+     * @param newTariff
+     */
     public static void updateCityTariff(String city,int newTariff){
 
 
@@ -718,10 +757,15 @@ public class DBComm {
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
 
-            String query = "UPDATE tariff_city  SET tariff="+newTariff+" WHERE city_name="+city;
+            String query = "UPDATE tariff_city  SET tariff = ? WHERE city_name = ?";
 
-            Statement st = conn.createStatement();
-            st.executeQuery(query);
+            PreparedStatement ps = conn.prepareStatement(query);
+            System.out.println(query);
+
+            ps.setInt(1,newTariff);
+            ps.setString(2,city);
+
+            ps.executeUpdate();
             // Do something with the Connection
 
         } catch (SQLException ex) {
@@ -734,21 +778,28 @@ public class DBComm {
 
     }
 
+    /**
+     * pass debugging
+     * @param district
+     * @param newTariff
+     */
 
-    public static void updateDistrictTariff(String district,int newTariff){
-
-
+    public static void updateDistrictTariff(String district,int newTariff) {
 
         Connection conn = null;
         try {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
+            String query = "UPDATE tariff_district  SET tariff = ? WHERE district_name = ?";
 
-            String query = "UPDATE tariff_district  SET tariff="+newTariff+" WHERE district_name="+district;
+            PreparedStatement ps = conn.prepareStatement(query);
 
-            Statement st = conn.createStatement();
-            st.executeQuery(query);
+
+            ps.setInt(1,newTariff);
+            ps.setString(2,district);
+
+            ps.executeUpdate();
             // Do something with the Connection
 
         } catch (SQLException ex) {
@@ -757,10 +808,14 @@ public class DBComm {
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
+    }
 
 
-
-
+    /**
+     * pass debugging
+     * @param country
+     * @param newTariff
+     */
     public static void updateCountryTariff(String country,int newTariff){
 
 
@@ -770,12 +825,15 @@ public class DBComm {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
+            String query = "UPDATE tariff_country  SET tariff = ? WHERE country_name = ?";
 
-            String query = "UPDATE tariff_country  SET tariff="+newTariff+" WHERE country_name="+country;
+            PreparedStatement ps = conn.prepareStatement(query);
 
-            Statement st = conn.createStatement();
-            st.executeQuery(query);
-            // Do something with the Connection
+
+            ps.setInt(1,newTariff);
+            ps.setString(2,country);
+
+            ps.executeUpdate();
 
         } catch (SQLException ex) {
             // handle any errors
