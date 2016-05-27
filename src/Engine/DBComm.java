@@ -47,41 +47,41 @@ public class DBComm {
      * @param newMeter
      */
     public static void addNewMeter(PowerMeter newMeter){
-        return;
-//        Connection conn = null;
-//        try {
-//            conn =
-//                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
-//                            "user=root&password=root");
-//            String query = " insert into meter (user_id, meter_id, active, init_date, last_read, max_wattage, total_wattage, current_wattage)"
-//                    + " values (?, ?, ?, ? , ?, ?, ?, ?)";
-//
-//            Object timestamp = new java.sql.Timestamp(newMeter.getStartOperationDate().getTime());
-//
-//
-//            Object lastReadStamp = new java.sql.Timestamp(newMeter.getLastReadDate().getTime());
-//
-//            // create the mysql insert preparedstatement
-//            PreparedStatement preparedStmt = conn.prepareStatement(query);
-//            preparedStmt.setInt(1, newMeter.getCostumerID());
-//            preparedStmt.setInt(2, newMeter.getID());
-//            preparedStmt.setBoolean(3, newMeter.getIsActive());
-//            preparedStmt.setObject(4, timestamp);
-//            preparedStmt.setObject(5, lastReadStamp);
-//
-//            preparedStmt.setInt(6, newMeter.getMaxWattage());
-//            preparedStmt.setInt(7, newMeter.getTotalReading());
-//            preparedStmt.setInt(8, newMeter.readWattage());
-//
-//            // execute the preparedstatement
-//            preparedStmt.execute();
-//            // Do something with the Connection
-//        } catch (SQLException ex) {
-//            // handle any errors
-//            System.out.println("SQLException: " + ex.getMessage());
-//            System.out.println("SQLState: " + ex.getSQLState());
-//            System.out.println("VendorError: " + ex.getErrorCode());
-//        }
+
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+            String query = " insert into meter (user_id, meter_id, active, init_date, last_read, max_wattage, total_wattage, current_wattage)"
+                    + " values (?, ?, ?, ? , ?, ?, ?, ?)";
+
+            Object timestamp = new java.sql.Timestamp(newMeter.getStartOperationDate().getTime());
+
+
+            Object lastReadStamp = new java.sql.Timestamp(newMeter.getLastReadDate().getTime());
+
+            // create the mysql insert preparedstatement
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, newMeter.getCostumerID());
+            preparedStmt.setInt(2, newMeter.getID());
+            preparedStmt.setBoolean(3, newMeter.getIsActive());
+            preparedStmt.setObject(4, timestamp);
+            preparedStmt.setObject(5, lastReadStamp);
+
+            preparedStmt.setInt(6, newMeter.getMaxWattage());
+            preparedStmt.setInt(7, newMeter.getTotalReading());
+            preparedStmt.setInt(8, newMeter.readWattage());
+
+            // execute the preparedstatement
+            preparedStmt.execute();
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
     }
 
 
