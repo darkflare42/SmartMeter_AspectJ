@@ -23,6 +23,7 @@ public class PowerMeter {
         m_id = id;
         m_startDate = startDate;
         m_currCustomer = null;
+        m_currWattageReading = 10;
     }
 
     public PowerMeter(int id, Date startDate, Customer customer) {
@@ -79,9 +80,6 @@ public class PowerMeter {
         this.m_maxWattage = m_maxWattage;
     }
 
-    public int getCostumerID(){
-        return m_currCustomer.getID();
-    }
 
     public Address getCurrentLocation(){
         return m_currCustomer.getAddress();
@@ -109,6 +107,13 @@ public class PowerMeter {
 
     public int getCurrentWattage(){
         return m_currWattageReading;
+    }
+
+    public int getCustomerID(){
+        if(m_currCustomer != null)
+            return m_currCustomer.getID();
+        return -1;
+
     }
 
 

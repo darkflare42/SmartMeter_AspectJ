@@ -28,7 +28,7 @@ public aspect DisconnectMeterAspect {
      * When a meter reaches his max wattage then we need to deal with it - in this case setting the meter
      * to INACTIVE
      */
-    pointcut MeterWattageMaxed() : call(* Engine.PowerMeter.readWattage());
+    pointcut MeterWattageMaxed() : execution(* Engine.PowerMeter.readWattage());
 
     /**
      * When a region is overloaded, we need to inactivate all meters
@@ -93,6 +93,8 @@ public aspect DisconnectMeterAspect {
      * who have not payed their monthly bill. Their meters need to be set as INACTIVE
      */
     after() returning(List<Customer> customers) : ClientBillNotPayed(){
+        //TODO: Add some logic in here, where it looks in the DB to see if the client has not payed the bill for 3 months ago. If he has, then disconnect all the meters
+
         for(Customer c: customers){
             List<PowerMeter> clientMeters = DBComm.getAllMeterdByUserId(c.getID());
             clientMeters.forEach(PowerMeter::setInactive);

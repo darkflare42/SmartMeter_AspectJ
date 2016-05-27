@@ -22,6 +22,8 @@ public class MainTest {
         new Thread(communicator).start();
         DBComm.init();
         PowerMeter m = new PowerMeter(0, new Date());
+
+        m.readWattage();
         DBComm.addNewMeter(m);
 
         //TODO: Have to make sure that somewhere after the communicator we read all the values
