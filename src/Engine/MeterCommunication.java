@@ -50,6 +50,7 @@ public class MeterCommunication implements Runnable{
      * @param m
      */
     public void removeMeter(PowerMeter m){
+        //TODO: Add function to meter that "inactivates" it
         m_currMeters.remove(m); //TODO: Check that this works, maybe we need to search via ID
     }
 

@@ -9,3 +9,7 @@ that allows reading and writing values to the DB, maybe running some queries als
 
 Supposedly the interaction with the meter simulator should also have its own module named MeterComm - again a static
 class that interacts with the simulator using a simple UDP protocol
+
+
+
+Add to the bill table - cutoff date

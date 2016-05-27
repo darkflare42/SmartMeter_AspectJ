@@ -10,6 +10,10 @@ public aspect ActivateMeterAspect {
 
     pointcut CityOverloadFixed();
 
+    /**
+     * This pointcut is for reactivating meters that have max wattage set - we need to reset the wattage reading
+     * and also activate meters that have been inactivated because they reached max wattage
+     */
     pointcut FirstOfMonthPassed();
 
 }
