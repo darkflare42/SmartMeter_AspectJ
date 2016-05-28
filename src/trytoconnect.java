@@ -8,7 +8,6 @@ import Engine.PowerMeter;
 
 import java.sql.*;
 import java.util.Date;
-import java.util.LinkedList;
 
 import Engine.*;
 
@@ -24,7 +23,7 @@ public class trytoconnect {
         Customer cs= new Customer("omer","king",100,ddd);
        // DBComm.addNewCustomer(cs);
         PowerMeter pm2 =new PowerMeter(56,false,d,d,13,55,250,cs);
-        DBComm.updatemeter(pm2);
+        DBComm.updateMeter(pm2);
 
     }
 

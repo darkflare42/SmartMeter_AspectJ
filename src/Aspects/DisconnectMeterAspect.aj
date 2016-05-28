@@ -55,7 +55,7 @@ public aspect DisconnectMeterAspect {
      */
     after(Customer c) : ClientDisconnected(c){
         LinkedList<PowerMeter> userMeters = DBComm.getAllMeterdByUserId(c.getID());
-        userMeters.forEach(DBComm::deltePowerMeter);
+        userMeters.forEach(DBComm::deletePowerMeter);
         //TODO: Check if we need to add some more functionality here (maybe calculating bill and stuff)
 
 
@@ -101,6 +101,10 @@ public aspect DisconnectMeterAspect {
         }
 
     }
+
+
+
+
 
 
 
