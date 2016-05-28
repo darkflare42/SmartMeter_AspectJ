@@ -13,10 +13,12 @@ public class Customer extends User {
     private Address m_address;
 
     public Customer(String firstName, String surname, int id, Address currentAddress){
+        super(userTypes.CUSTOMER);
         m_fname = firstName;
         m_lname = surname;
         m_id = id;
         m_address = currentAddress;
+
     }
 
     public String getFirstName() {

@@ -7,7 +7,11 @@ import GUI.AdminMainMenu;
  */
 public class Administrator extends User {
 
-    @Override
+
+    public Administrator(){
+        super(userTypes.ADMINISTRATOR);
+    }
+
     public void openMainMenu(){
         AdminMainMenu m = new AdminMainMenu();
     }

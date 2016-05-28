@@ -7,6 +7,10 @@ import GUI.TechnicianMainMenu;
  */
 public class Technician extends User {
 
+    public Technician(){
+        super(userTypes.TECHNICIAN);
+    }
+
     @Override
     public void openMainMenu(){
         TechnicianMainMenu m = new TechnicianMainMenu();

@@ -63,7 +63,7 @@ public class DBComm {
 
             // create the mysql insert preparedstatement
             PreparedStatement preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setInt(1, newMeter.getCostumerID());
+            preparedStmt.setInt(1, newMeter.getCustomerID());
             preparedStmt.setInt(2, newMeter.getID());
             preparedStmt.setBoolean(3, newMeter.getIsActive());
             preparedStmt.setObject(4, timestamp);
@@ -180,7 +180,7 @@ public class DBComm {
     public static LinkedList<PowerMeter> getAllMeterdByUserId(int userId){
         LinkedList<PowerMeter> allMeters =getAllMeters();
         for(int i=0; i<allMeters.size(); i++){
-            if(allMeters.get(i).getCostumerID()!= userId){
+            if(allMeters.get(i).getCustomerID()!= userId){
                 allMeters.remove(i);
             }
         }
@@ -245,7 +245,7 @@ public class DBComm {
 
             PreparedStatement ps = conn.prepareStatement(query);
 
-            ps.setInt(1,meter.getCostumerID());
+            ps.setInt(1,meter.getCustomerID());
             ps.setBoolean(2,meter.getIsActive());
             ps.setObject(3,initStamp);
             ps.setObject(4,lastReadStamp);
