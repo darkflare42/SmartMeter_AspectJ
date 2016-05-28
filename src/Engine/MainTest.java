@@ -19,12 +19,15 @@ public class MainTest {
     public static void main(String[] args) {
         //LoginScreen ls = new LoginScreen();
         communicator = new MeterCommunication();
+        currentUser =new Customer();
         new Thread(communicator).start();
-        DBComm.init();
+       // DBComm.init();
         PowerMeter m = new PowerMeter(0, new Date());
-
+        System.out.print("sfdsfd");
+        DBComm.deltePowerMeter(m);
         m.readWattage();
-        DBComm.addNewMeter(m);
+        DBComm.addNewMeter(m);;
+        DBComm.getMeterById(23);
 
         //TODO: Have to make sure that somewhere after the communicator we read all the values
 

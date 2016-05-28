@@ -9,14 +9,15 @@ public class Customer extends User {
 
     private String m_fname;
     private String m_lname;
-    private int m_id;
     private Address m_address;
+    public Customer(){
+        super(userTypes.CUSTOMER);
+    }
 
     public Customer(String firstName, String surname, int id, Address currentAddress){
-        super(userTypes.CUSTOMER);
+        super(userTypes.CUSTOMER,id);
         m_fname = firstName;
         m_lname = surname;
-        m_id = id;
         m_address = currentAddress;
 
     }
@@ -29,9 +30,6 @@ public class Customer extends User {
         return m_lname;
     }
 
-    public int getID() {
-        return m_id;
-    }
 
     public Address getAddress() {
         return m_address;

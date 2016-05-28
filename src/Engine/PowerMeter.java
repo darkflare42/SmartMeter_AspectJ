@@ -23,12 +23,14 @@ public class PowerMeter {
         m_id = id;
         m_startDate = startDate;
         m_currCustomer = null;
+        m_lastReadDate= startDate;
         m_currWattageReading = 10;
     }
 
     public PowerMeter(int id, Date startDate, Customer customer) {
         m_id = id;
         m_startDate = startDate;
+        m_lastReadDate= startDate;
         m_currCustomer = customer;
     }
 
