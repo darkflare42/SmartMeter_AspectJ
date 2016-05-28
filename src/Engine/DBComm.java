@@ -92,7 +92,7 @@ public class DBComm {
 
 
 
-    public static void deltePowerMeter(PowerMeter meter) {
+    public static void deletePowerMeter(PowerMeter meter) {
         Connection conn = null;
         try {
             conn =
@@ -227,7 +227,7 @@ public class DBComm {
      * pass debugging
      * @param meter
      */
-    public static void updatemeter(PowerMeter meter){
+    public static void updateMeter(PowerMeter meter){
 
 
 
@@ -845,6 +845,11 @@ public class DBComm {
 
     }
 
+
+
+    public static LinkedList<String> getCities(){
+        return null;
+    }
 
 
 
