@@ -42,6 +42,7 @@ public class MainTest {
 
         PowerMeter pm = new PowerMeter(23,false,null,null,5,5,5,cs);
         System.out.println(pm.getIsActive());
+
         pm.setMaxWattage(10);
         System.out.println(pm.getIsActive());
        // BillingEngine.checkMonthlyBilling();
