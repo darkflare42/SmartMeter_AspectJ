@@ -363,6 +363,21 @@ public class DBComm {
 
     //todo getAllActieMeters, getallInActiveMeters
 
+    public static LinkedList<PowerMeter> getAllActiveMeter(){
+        LinkedList<PowerMeter> allMeters= getAllMeters();
+        LinkedList<PowerMeter> allActive =new LinkedList<PowerMeter>();
+        for(int i=0;i<allMeters.size();i++){
+            if( allMeters.get(i).getIsActive()){
+                allActive.push(allMeters.get(i));
+            }
+        }
+        return allActive;
+
+    }
+
+
+
+
     public static Customer getCustumerById(int userId){
         Connection conn = null;
         try {

@@ -9,4 +9,11 @@ public class BillingEngine {
     public static void checkMonthlyBilling(){
 
     }
+
+    public static void sendLennter(int bill,Customer cr){
+
+
+        return
+    }
+
 }
