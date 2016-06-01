@@ -434,6 +434,7 @@ public class DBComm {
                 Customer customer = getCustumerById(t.getInt(1));
                 allCust.add(customer);
             }
+            return allCust;
 
         } catch (SQLException ex) {
             // handle any errors

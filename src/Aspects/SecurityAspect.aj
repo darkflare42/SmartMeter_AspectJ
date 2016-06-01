@@ -94,8 +94,10 @@ public aspect SecurityAspect {
     void around(Customer cust): secureCustomersList() && args(cust){
         System.out.print("99");
         if (MainTest.currentUser.getUserType() == User.userTypes.CUSTOMER) {
+            System.out.println("delete costumer proceed fail");
             return;
         }
+        System.out.println("delete costumer proceed");
         proceed(cust);
 
     }
