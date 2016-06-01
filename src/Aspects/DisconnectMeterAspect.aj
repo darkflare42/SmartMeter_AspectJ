@@ -56,7 +56,9 @@ public aspect DisconnectMeterAspect {
         //TODO: Interference with SendReportAspect - the report needs to be sent after calculating the currentbill
         BillingEngine.calculateCurrentBill(c);
         LinkedList<PowerMeter> userMeters = DBComm.getAllMeterdByUserId(c.getID());
-        userMeters.forEach(DBComm::deletePowerMeter);
+        for(PowerMeter m : userMeters){
+            DBComm.deletePowerMeter(m);
+        }
     }
 
     /**
