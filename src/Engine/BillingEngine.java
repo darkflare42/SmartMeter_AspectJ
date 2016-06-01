@@ -35,7 +35,6 @@ public class BillingEngine {
     public static void checkMonthlyBilling(){
         //Go over every customer in the DB, and then over each and every active meter that he has
         LinkedList<Customer> customers = DBComm.getAllCustomers();
-
         for(Customer c : customers){
             calculateCurrentBill(c);
         }
@@ -62,8 +61,21 @@ public class BillingEngine {
 
 
 
-    public static void sendBillingReportByMail(int bill, User c){
-        //Mock function. In reailty this calls an external report engine
+    public static void sendBillingReportByMail(int bill, User user){
+        //Mock function. In reality this calls an external report engine
+    }
+
+    public static void updateCurrentCustomerBill(int customerID, int wattage){
+        Bill b = DBComm.getBillByCustomerID(customerID);
+        double price = b.getPrice();
+        price += (wattage * (DBComm.getCityTaarif(b.getCustomer().getAddress().getCity())));
+        b.setPrice(price);
+        DBComm.updateBill(b);
+    }
+
+    public static void PayBill(Customer c, Bill b){
+        //Mock function - in real life this would be an asynchronous function that waits for
+        //a payment authorization from the credit card company
     }
 
 }
