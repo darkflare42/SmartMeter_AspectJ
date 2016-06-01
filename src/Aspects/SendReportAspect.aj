@@ -24,7 +24,7 @@ public aspect SendReportAspect {
         try {
             d.next();
             int bill = d.getInt(1);
-            BillingEngine.sendLetter(bill, user);
+            BillingEngine.sendBillingReportByMail(bill, user);
             System.out.println("sdfr");
         }
         catch(Exception ex){

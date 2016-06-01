@@ -60,4 +60,9 @@ public class BillingEngine {
     }
 
 
+
+    public static void sendBillingReportByMail(int bill, Customer c){
+        //Mock function. In reailty this calls an external report engine
+    }
+
 }
