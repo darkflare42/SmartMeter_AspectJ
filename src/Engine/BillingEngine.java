@@ -9,4 +9,8 @@ public class BillingEngine {
     public static void checkMonthlyBilling(){
 
     }
+
+    public static void calculateCurrentBill(Customer c){
+
+    }
 }

@@ -44,21 +44,19 @@ public aspect DisconnectMeterAspect {
         int maxWattage = currMeter.getMaxWattage();
         if(watt >= maxWattage){
             currMeter.setInactive();
-            //DBComm.updateMeter(currMeter);
-            //TODO: ADD the function which changes the status of the meter to DBComm
+            DBComm.updateMeter(currMeter);
         }
     }
 
     /**
-     * This advice occurs before a client is removed from the DB. We need to get all the meters he has
-     * and set then as delete them from the DB
+     * This advice occurs before a client is removed from the DB. We need to calculate the current bill,
+     * get all the meters he has and then as delete them from the DB
      */
-    after(Customer c) : ClientDisconnected(c){
+    before(Customer c) : ClientDisconnected(c){
+        //TODO: Interference with SendReportAspect - the report needs to be sent after calculating the currentbill
+        BillingEngine.calculateCurrentBill(c);
         LinkedList<PowerMeter> userMeters = DBComm.getAllMeterdByUserId(c.getID());
         userMeters.forEach(DBComm::deletePowerMeter);
-        //TODO: Check if we need to add some more functionality here (maybe calculating bill and stuff)
-
-
     }
 
     /**

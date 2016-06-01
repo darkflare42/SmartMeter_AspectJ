@@ -21,16 +21,19 @@ public aspect SecurityAspect {
     //TODO: See if we can add more security elements in here
 
    // pointcut delt() : call(* Engine.DBComm.deltePowerMeter);
-    pointcut secureMeterChanges(): call(* Engine.DBComm.deletePowerMeter(PowerMeter)) || call(* Engine.DBComm.addNewMeter(PowerMeter)) || call(* Engine.DBComm.updatemeter(PowerMeter));
+    pointcut secureMeterChanges(): call(* Engine.DBComm.deletePowerMeter(PowerMeter)) ||
+                                   call(* Engine.DBComm.addNewMeter(PowerMeter)) ||
+                                   call(* Engine.DBComm.updatemeter(PowerMeter));
+
     void around(PowerMeter meter): secureMeterChanges() && args(meter){
+        System.out.println("================================================================================");
         if (MainTest.currentUser.getUserType() == User.userTypes.CUSTOMER) {
             return;
         }
+
         proceed(meter);
 
     }
-
-
 
 
     /**

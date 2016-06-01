@@ -47,7 +47,6 @@ public class DBComm {
      * @param newMeter
      */
     public static void addNewMeter(PowerMeter newMeter){
-
         Connection conn = null;
         try {
             conn =
