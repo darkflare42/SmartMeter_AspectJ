@@ -16,15 +16,16 @@ import Engine.DBComm;
 
 public aspect SendReportAspect {
 
-    pointcut CustomerDisconnected(int userId):execution (* Engine.DBComm.deleteCustomer(int)) && args(usedId);
+    pointcut CustomerDisconnected(Customer user):execution (* Engine.DBComm.deleteCustomer(Custumer)) && args(user);
 
-    before(int userId): CustomerDisconnected(UsedId) throws exception{
-        ResultSet d = DBComm.getDataFromBillByUserId(userId);
+    before(Customer user): CustomerDisconnected(user) {
+        System.out.println("omer");
+        ResultSet d = DBComm.getDataFromBillByUserId(user.getID());
         try {
             d.next();
-            return d.getInt(1);
-            Customer ct= DBComm.getCustumerById(userId);
-
+            int bill = d.getInt(1);
+            BillingEngine.sendLetter(bill, user);
+            System.out.println("sdfr");
         }
         catch(Exception ex){
             return;

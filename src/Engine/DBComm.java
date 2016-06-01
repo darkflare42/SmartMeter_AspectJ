@@ -335,6 +335,7 @@ public class DBComm {
 
 
     public static void deleteCustomer(Customer customer){
+        System.out.println("delete Customer");
         Connection conn = null;
         try {
             conn =
@@ -370,7 +371,6 @@ public class DBComm {
                 allActive.push(allMeters.get(i));
             }
         }
-        System.out.print("hi or");
         return allActive;
 
     }
