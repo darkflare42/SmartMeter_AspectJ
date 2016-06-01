@@ -22,7 +22,7 @@ public aspect DiagnosticsDebuggingAspect {
      * different DB connection rather than the one in the system, this pointcut happens only when the system
      * is in diagnosticsMode
      */
-    pointcut NewMeterAdded(PowerMeter newMeter): call(* DBComm.addNewMeter(PowerMeter)) &&
+    pointcut NewMeterAdded(PowerMeter newMeter): execution(* DBComm.addNewMeter(PowerMeter)) &&
                                             args(newMeter) && if(MainTest.diagnosticsMode);
 
     pointcut MeterRemoved(PowerMeter m): execution(* DBComm.deletePowerMeter(PowerMeter)) &&

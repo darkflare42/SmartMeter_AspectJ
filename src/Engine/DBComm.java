@@ -377,9 +377,6 @@ public class DBComm {
 
     }
 
-
-
-
     public static Customer getCustumerById(int userId){
         Connection conn = null;
         try {
@@ -414,9 +411,6 @@ public class DBComm {
 
         return null;
     }
-
-
-
 
     public static LinkedList<Customer> getAllCustomers(){
 
@@ -453,22 +447,6 @@ public class DBComm {
         return null;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static boolean login(String username, String password){
         //TODO: Maybe we can merge this and the getUser method together
         return true;
@@ -477,9 +455,6 @@ public class DBComm {
     public static User getUser(String username){
         return null;
     }
-
-
-
 
     public static void insertDataLogIn(int userID, String userName, String password) {
 
@@ -527,8 +502,6 @@ public class DBComm {
         return null;
     }
 
-
-
     public static void insertDataBill(int userId, int currentBill, java.util.Date lastDateToPay, boolean payedBool) {
         Connection conn = null;
         try {
@@ -556,7 +529,6 @@ public class DBComm {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
     }
-
 
     public static ResultSet getDataFromBillByUserId(int userId) {
         Connection conn = null;
@@ -880,11 +852,138 @@ public class DBComm {
 
     }
 
-
-
     public static LinkedList<String> getCities(){
         return null;
     }
+
+    public static void insertBill(Bill b){
+        insertDataBill(b.getCustomer().getID(), (int)b.getPrice(), b.getCutoffDate(), false);
+    }
+
+    public static Bill getBillByCustomerID(int customerID){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+
+            String query = "select * FROM bill WHERE user_id= "+customerID;
+
+
+            //String query = " insert into bill (user_id, current_bill, last_date_to_pay, payed)"
+            //        + " values (?, ?, ?,?)";
+
+
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery(query );
+            // Do something with the Connection
+
+            d.next();
+            Customer c = getCustumerById(customerID);
+
+            int currentPrice = d.getInt(2);
+            Date cutOffDate = d.getDate(3);
+            boolean payed = d.getBoolean(4);
+
+            return new Bill(c, currentPrice, cutOffDate, null, payed);
+
+            // Do something with the Connection
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLExceptionbr35345345: " + ex.getMessage());
+            System.out.println("SQLExceptionbr: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return null;
+
+    }
+
+    public static void updateBill(Bill b){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+
+            String query = "UPDATE bill  SET current_bill=?, last_date_to_pay=?, payed=? Where user_id=?";
+
+            //String query = " insert into bill (user_id, current_bill, last_date_to_pay, payed)"
+            //        + " values (?, ?, ?,?)";
+
+            Object timestamp = new java.sql.Timestamp(b.getCutoffDate().getTime());
+
+
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setInt(1,(int)b.getPrice());
+            ps.setObject(2, timestamp);
+            ps.setBoolean(3, b.getPayed());
+            ps.setInt(4, b.getCustomer().getID());
+
+            ps.executeUpdate();
+
+            // Do something with the Connection
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException66: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+
+    }
+
+    public static LinkedList<Bill> getAllBills(){
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+
+            LinkedList<Bill> billList = new LinkedList<>();
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery("SELECT * FROM bill");
+            while(d.next()){
+                int userID = d.getInt(1);
+                int currentPrice = d.getInt(2);
+                Date cutOffDate = d.getDate(3);
+                boolean payed = d.getBoolean(4);
+                billList.add(new Bill(getCustumerById(userID), currentPrice, cutOffDate, null, payed));
+            }
+            return billList;
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException8: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return null;
+    }
+
+    public static LinkedList<Customer> getCustomersFromCountry(String country){
+        LinkedList<Customer> customers = getAllCustomers();
+        LinkedList<Customer> filteredCustomers = new LinkedList<>();
+        for(Customer c : customers){
+            if(c.getAddress().getCountry().equals(country))
+                    filteredCustomers.add(c);
+        }
+        return filteredCustomers;
+    }
+
+    public static LinkedList<Customer> getCustomersFromCity(String country, String city){
+        LinkedList<Customer> customers = getAllCustomers();
+        LinkedList<Customer> filteredCustomers = new LinkedList<>();
+        for(Customer c : customers){
+            if(c.getAddress().getCountry().equals(country) && c.getAddress().getCity().equals(city))
+                filteredCustomers.add(c);
+        }
+        return filteredCustomers;
+    }
+
+
 
 
 
