@@ -177,12 +177,14 @@ public class DBComm {
 
 
     public static LinkedList<PowerMeter> getAllMeterdByUserId(int userId){
+        System.out.println("getAllMeterdByUserId");
         LinkedList<PowerMeter> allMeters =getAllMeters();
         for(int i=0; i<allMeters.size(); i++){
             if(allMeters.get(i).getCustomerID()!= userId){
                 allMeters.remove(i);
             }
         }
+        System.out.println(allMeters);
         return allMeters;
 
 
@@ -215,7 +217,7 @@ public class DBComm {
 
 
 
-
+        System.out.println("dfgfdgdfg");
         return null;
 
 

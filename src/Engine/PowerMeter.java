@@ -117,6 +117,9 @@ public class PowerMeter {
         return -1;
 
     }
+    public void setM_currWattageReading(int wattage){
+        m_currWattageReading=wattage;
+    }
 
 
 }

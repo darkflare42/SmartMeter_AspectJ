@@ -22,10 +22,29 @@ public class MainTest {
         //LoginScreen ls = new LoginScreen();
         //communicator = new MeterCommunication();
      //   System.out.println(DBComm.getCountryTaarif("maaldge"));
-        currentUser =new Administrator();
+
+
+
+
+
+
+
+
+
+      //  currentUser =new Administrator();
         Address add = new Address("maaldge","maasfsdfldge","maale","o",234);
         Customer cs= new Customer("omer","Ornan",2143,add);
-        BillingEngine.checkMonthlyBilling();
+        currentUser = cs;
+        //Bill b = new Bill(cs,35,null,null);
+      //  BillingEngine.FirstOfMonth();
+      //  BillingEngine.PayBill(cs, b);
+       // Communicator.overloadFixed("dfg");
+
+        PowerMeter pm = new PowerMeter(23,false,null,null,5,5,5,cs);
+        System.out.println(pm.getIsActive());
+        pm.setMaxWattage(10);
+        System.out.println(pm.getIsActive());
+       // BillingEngine.checkMonthlyBilling();
         //DBComm.deleteCustomer(cs);
        // diagnosticsMode = true;
         //DBComm.deletePowerMeter(m);

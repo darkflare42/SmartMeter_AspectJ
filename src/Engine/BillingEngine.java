@@ -65,5 +65,10 @@ public class BillingEngine {
     public static void sendBillingReportByMail(int bill, User c){
         //Mock function. In reailty this calls an external report engine
     }
+    public static void PayBill(Customer c, Bill b){}
 
+
+    public static void FirstOfMonth(){
+        //Mock function. In reailty this call to report about function that have to be activate
+    }
 }
