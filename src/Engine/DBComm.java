@@ -370,6 +370,7 @@ public class DBComm {
                 allActive.push(allMeters.get(i));
             }
         }
+        System.out.print("hi or");
         return allActive;
 
     }
