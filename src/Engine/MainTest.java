@@ -24,6 +24,7 @@ public class MainTest {
         currentUser =new Customer();
       //  new Thread(communicator).start();
        // DBComm.init();
+        BillingEngine.init();
         PowerMeter m = new PowerMeter(0, new Date());
         diagnosticsMode = true;
 //        DBComm.deletePowerMeter(m);

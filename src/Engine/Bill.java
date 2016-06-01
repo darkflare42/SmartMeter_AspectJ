@@ -9,13 +9,16 @@ public class Bill {
 
     private int m_id;
     private Customer m_customer;
-    private int m_price;
+    private double m_price;
     private Date m_cutOffDate;
     private Date m_issuedDate;
 
 
-    public Bill(){
-
+    public Bill(Customer customer, double value, Date cutOffDate, Date issuedDate){
+        m_customer = customer;
+        m_price = value;
+        m_cutOffDate = cutOffDate;
+        m_issuedDate = issuedDate;
     }
 
     public void updateFine(int value){
