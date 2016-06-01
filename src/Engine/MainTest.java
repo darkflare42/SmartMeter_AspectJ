@@ -21,12 +21,13 @@ public class MainTest {
     public static void main(String[] args) {
         //LoginScreen ls = new LoginScreen();
         //communicator = new MeterCommunication();
+     //   System.out.println(DBComm.getCountryTaarif("maaldge"));
         currentUser =new Administrator();
-        Address add = new Address("o","o","o","o",234);
+        Address add = new Address("maasfsdfldge","maaldge","maale","o",234);
         Customer cs= new Customer("omer","Ornan",2143,add);
         DBComm.deleteCustomer(cs);
-        diagnosticsMode = true;
-//        DBComm.deletePowerMeter(m);
+       // diagnosticsMode = true;
+        //DBComm.deletePowerMeter(m);
 //        m.readWattage();
         //DBComm.addNewMeter(m);
 //        DBComm.getMeterById(23);

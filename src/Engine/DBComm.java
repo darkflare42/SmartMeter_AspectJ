@@ -77,7 +77,7 @@ public class DBComm {
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException4444: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -208,7 +208,7 @@ public class DBComm {
             return meters;
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException8: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -262,7 +262,7 @@ public class DBComm {
 
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException66: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -318,7 +318,7 @@ public class DBComm {
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException345: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -349,7 +349,7 @@ public class DBComm {
             preparedStmt.execute();
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException345345: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -399,7 +399,7 @@ public class DBComm {
 
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLExceptionbr: " + ex.getMessage());
+            System.out.println("SQLExceptionbr35345345: " + ex.getMessage());
             System.out.println("SQLExceptionbr: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
@@ -437,7 +437,7 @@ public class DBComm {
 
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException456456: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -498,7 +498,7 @@ public class DBComm {
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLExceptio456n: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -516,7 +516,7 @@ public class DBComm {
             return d;
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException345345345: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendoreError: " + ex.getErrorCode());
         }
@@ -548,7 +548,7 @@ public class DBComm {
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException456465456: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -567,7 +567,7 @@ public class DBComm {
             return d;
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException09: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendoreError: " + ex.getErrorCode());
         }
@@ -587,13 +587,26 @@ public class DBComm {
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
             Statement st = conn.createStatement();
-            ResultSet d = st.executeQuery("SELECT * FROM  tariff_city WHERE city_name=" + city);
+            System.out.println("start get city tariff");
+
+
+
+            PreparedStatement tr = conn.prepareStatement("SELECT * FROM  tariff_city WHERE city_name=?");
+            tr.setString(1,city);
+           //tr.executeQuery(); rs = tr.executeQuery();
+
+
+
+
+           // System.out.println("SELECT * FROM  tariff_city WHERE city_name='" + city+"'");
+            ResultSet d = tr.executeQuery();
+            System.out.println("finish get city tariff");
             d.next();
             return d.getInt("tariff");
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLExceptio08n: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendoreError: " + ex.getErrorCode());
         }
@@ -614,14 +627,16 @@ public class DBComm {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
-            Statement st = conn.createStatement();
-            ResultSet d = st.executeQuery("SELECT * FROM  tariff_country WHERE country_name=" + country);
+            PreparedStatement tr = conn.prepareStatement("SELECT * FROM  tariff_country WHERE country_name=?");
+            tr.setString(1,country);
+
+            ResultSet d = tr.executeQuery();
             d.next();
             return d.getInt("tariff");
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException34535: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendoreError: " + ex.getErrorCode());
         }
@@ -642,14 +657,16 @@ public class DBComm {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
                             "user=root&password=root");
-            Statement st = conn.createStatement();
-            ResultSet d = st.executeQuery("SELECT * FROM  tariff_district WHERE district_name=" + district);
+            PreparedStatement tr = conn.prepareStatement("SELECT * FROM  district WHERE district=?");
+            tr.setString(1,district);
+
+            ResultSet d = tr.executeQuery();
             d.next();
             return d.getInt("tariff");
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException234243: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendoreError: " + ex.getErrorCode());
         }
@@ -685,7 +702,7 @@ public class DBComm {
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException456456456456: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -718,7 +735,7 @@ public class DBComm {
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException3333: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
@@ -750,7 +767,7 @@ public class DBComm {
             // Do something with the Connection
         } catch (SQLException ex) {
             // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLException234234: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
