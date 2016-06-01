@@ -214,6 +214,24 @@ public aspect DiagnosticsDebuggingAspect {
     }
 
     void around() : UpdateCustomerBilling(){
+        //In diagnostics mode this function goes over all the meters and sets the meter to active
+        //As well as calculating the bill to the customer (and adds it to the DB)
+        LinkedList<Customer> customers = DBComm.getAllCustomers();
+        for(Customer c : customers){
+            LinkedList<PowerMeter> meters = DBComm.getAllMeterdByUserId(c.getID());
+            int getTotalWattage = 0;
+            for(PowerMeter m : meters){
+                if(!m.getIsActive()) m.setActive();
+                getTotalWattage += m.getTotalReading();
+            }
+            //Some standard calculation for the price to pay
+            double cityTariff = DBComm.getCityTaarif(c.getAddress().getCity());
+            double countryTriff = DBComm.getCountryTaarif(c.getAddress().getCountry());
+            double amountToPay = getTotalWattage * cityTariff * countryTriff;
+            Calendar currDate = Calendar.getInstance();
+            Bill b = new Bill(c, amountToPay, currDate.getTime(), currDate.getTime());
+            insertDataBill(c.getID(), (int)amountToPay, currDate.getTime(), false);
+        }
         return;
     }
 
@@ -302,6 +320,34 @@ public aspect DiagnosticsDebuggingAspect {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
         return null;
+    }
+
+    public static void insertDataBill(int userId, int currentBill, java.util.Date lastDateToPay, boolean payedBool) {
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgridDiagnostics?" +
+                            "user=root&password=root");
+            String query = " insert into billDiagnostics (user_id, current_bill, last_date_to_pay, payed)"
+                    + " values (?, ?, ?,?)";
+
+            // create the mysql insert preparedstatement
+            Object timestamp = new java.sql.Timestamp(lastDateToPay.getTime());
+
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setInt(1, userId);
+            preparedStmt.setInt(2, currentBill);
+            preparedStmt.setObject(3, timestamp);
+            preparedStmt.setBoolean(4, payedBool);
+            // execute the preparedstatement
+            preparedStmt.execute();
+            // Do something with the Connection
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
     }
 
 
