@@ -36,28 +36,27 @@ public class BillingEngine {
         //Go over every customer in the DB, and then over each and every active meter that he has
         LinkedList<Customer> customers = DBComm.getAllCustomers();
         for(Customer c : customers){
-            LinkedList<PowerMeter> meters = DBComm.getAllMeterdByUserId(c.getID());
-            int getTotalWattage = 0;
-            for(PowerMeter m : meters){
-                if(m.getIsActive()){  //Run over only active meters
-                    getTotalWattage += m.getTotalReading();
-                }
-            }
-            //Some standard calculation for the price to pay
-            double cityTariff = DBComm.getCityTaarif(c.getAddress().getCity());
-            double countryTriff = DBComm.getCountryTaarif(c.getAddress().getCountry());
-            double amountToPay = getTotalWattage * cityTariff * countryTriff;
-            Calendar currDate = Calendar.getInstance();
-
-            Bill b = new Bill(c, amountToPay, currDate.getTime(), currDate.getTime());
-
+            calculateCurrentBill(c);
         }
 
 
     }
 
     public static void calculateCurrentBill(Customer c){
-
+        LinkedList<PowerMeter> meters = DBComm.getAllMeterdByUserId(c.getID());
+        int getTotalWattage = 0;
+        for(PowerMeter m : meters){
+            if(m.getIsActive()){  //Run over only active meters
+                getTotalWattage += m.getTotalReading();
+            }
+        }
+        //Some standard calculation for the price to pay
+        double cityTariff = DBComm.getCityTaarif(c.getAddress().getCity());
+        double countryTriff = DBComm.getCountryTaarif(c.getAddress().getCountry());
+        double amountToPay = getTotalWattage * cityTariff * countryTriff;
+        Calendar currDate = Calendar.getInstance();
+        Bill b = new Bill(c, amountToPay, currDate.getTime(), currDate.getTime());
+        DBComm.insertDataBill(c.getID(), (int)amountToPay, currDate.getTime(), false);
     }
 
 
