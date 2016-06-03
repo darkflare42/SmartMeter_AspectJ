@@ -77,7 +77,6 @@ public class BillingEngine {
         //Mock function - in real life this would be an asynchronous function that waits for
         //a payment authorization from the credit card company
     }
-    public static void PayBill(Customer c, Bill b){}
 
 
     public static void FirstOfMonth(){

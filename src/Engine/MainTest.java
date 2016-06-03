@@ -1,6 +1,7 @@
 package Engine; /**
  * Created by Or Keren on 02/05/2016.
  */
+import Aspects.DisconnectMeterAspect;
 import Engine.DBComm;
 import Engine.MeterCommunication;
 import Engine.User;
@@ -20,35 +21,29 @@ public class MainTest {
 
     public static void main(String[] args) {
         //LoginScreen ls = new LoginScreen();
-        //communicator = new MeterCommunication();
-     //   System.out.println(DBComm.getCountryTaarif("maaldge"));
+        communicator = new MeterCommunication();
+        //   System.out.println(DBComm.getCountryTaarif("maaldge"));
 
 
-
-
-
-
-
-
-
-      //  currentUser =new Administrator();
-        Address add = new Address("maaldge","maasfsdfldge","maale","o",234);
-        Customer cs= new Customer("omer","Ornan",2143,add);
+        //  currentUser =new Administrator();
+        Address add = new Address("maaldge", "maasfsdfldge", "maale", "o", 234);
+        Customer cs = new Customer("omer", "Ornan", 2143, add);
         currentUser = cs;
         //Bill b = new Bill(cs,35,null,null);
-      //  BillingEngine.FirstOfMonth();
-      //  BillingEngine.PayBill(cs, b);
-       // Communicator.overloadFixed("dfg");
+        //  BillingEngine.FirstOfMonth();
+        //  BillingEngine.PayBill(cs, b);
+        // Communicator.overloadFixed("dfg");
 
-        PowerMeter pm = new PowerMeter(23,false,null,null,5,5,5,cs);
+        PowerMeter pm = new PowerMeter(23, false, null, null, 5, 5, 5, cs);
         System.out.println(pm.getIsActive());
-
+        DBComm.updateCityTariff("test", 1);
 
         pm.setMaxWattage(10);
         System.out.println(pm.getIsActive());
-       // BillingEngine.checkMonthlyBilling();
+        //DisconnectMeterAspect.disconnectAllMeters(cs);
+        // BillingEngine.checkMonthlyBilling();
         //DBComm.deleteCustomer(cs);
-       // diagnosticsMode = true;
+        // diagnosticsMode = true;
         //DBComm.deletePowerMeter(m);
 //        m.readWattage();
         //DBComm.addNewMeter(m);
@@ -60,8 +55,10 @@ public class MainTest {
 //        DBComm.getAllMeterdByUserId(1);
 //       DBComm.insertDataBill(5,5,new Date(),true);
 
-        //TODO: Have to make sure that somewhere after the communicator we read all the values
 
+    }
+
+    public static void shutdown(){
 
     }
 }

@@ -12,7 +12,6 @@ public class DBComm {
 
     private static Connection con;
 
-
     public static void init(){
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -31,8 +30,6 @@ public class DBComm {
             System.out.println("Exception in" + DBComm.class.getClass().getName() + ": " + e.getMessage());
         }
     }
-
-
 
     /**
      * meter columns:
@@ -83,14 +80,6 @@ public class DBComm {
         }
     }
 
-
-
-
-
-
-
-
-
     public static void deletePowerMeter(PowerMeter meter) {
         Connection conn = null;
         try {
@@ -112,13 +101,6 @@ public class DBComm {
 
 
     }
-
-
-
-
-
-
-
 
     public static PowerMeter getMeterById(int meterId){
         Connection conn = null;
@@ -162,7 +144,6 @@ public class DBComm {
         return null;
     }
 
-
     public static LinkedList<PowerMeter> getAllMetersByCity(String city){
         LinkedList<PowerMeter> allMeters =getAllMeters();
         for(int i=0; i<allMeters.size(); i++){
@@ -174,7 +155,6 @@ public class DBComm {
 
 
     }
-
 
     public static LinkedList<PowerMeter> getAllMeterdByUserId(int userId){
         System.out.println("getAllMeterdByUserId");
@@ -189,8 +169,6 @@ public class DBComm {
 
 
     }
-
-
 
     public static LinkedList<PowerMeter> getAllMeters(){
         Connection conn = null;
@@ -223,15 +201,11 @@ public class DBComm {
 
     }
 
-
     /**
      * pass debugging
      * @param meter
      */
     public static void updateMeter(PowerMeter meter){
-
-
-
         Connection conn = null;
         try {
             conn =
@@ -271,15 +245,6 @@ public class DBComm {
 
 
     }
-
-
-
-
-
-
-
-
-
 
     /**
      * user table:
@@ -332,10 +297,6 @@ public class DBComm {
 
     }
 
-
-
-
-
     public static void deleteCustomer(Customer customer){
         System.out.println("delete Customer");
         Connection conn = null;
@@ -360,10 +321,6 @@ public class DBComm {
 
 
     }
-
-
-
-    //todo getAllActieMeters, getallInActiveMeters
 
     public static LinkedList<PowerMeter> getAllActiveMeter(){
         LinkedList<PowerMeter> allMeters= getAllMeters();
@@ -403,12 +360,6 @@ public class DBComm {
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
-
-
-
-
-
-
         return null;
     }
 
@@ -444,15 +395,6 @@ public class DBComm {
 
 
 
-        return null;
-    }
-
-    public static boolean login(String username, String password){
-        //TODO: Maybe we can merge this and the getUser method together
-        return true;
-    }
-
-    public static User getUser(String username){
         return null;
     }
 
@@ -590,7 +532,6 @@ public class DBComm {
 
     }
 
-
     /**
      * pass debugging
      * @param country
@@ -620,7 +561,6 @@ public class DBComm {
 
     }
 
-
     /**
      * pass debugging
      * @param district
@@ -649,7 +589,6 @@ public class DBComm {
         return -1;
 
     }
-
 
     /**
      * pass dubugging.
@@ -682,7 +621,6 @@ public class DBComm {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
     }
-
 
     /**
      * pass debugging.
@@ -748,7 +686,6 @@ public class DBComm {
         }
     }
 
-
     /**
      * pass debugging
      * @param city
@@ -790,7 +727,6 @@ public class DBComm {
      * @param district
      * @param newTariff
      */
-
     public static void updateDistrictTariff(String district,int newTariff) {
 
         Connection conn = null;
@@ -807,7 +743,6 @@ public class DBComm {
             ps.setString(2,district);
 
             ps.executeUpdate();
-            // Do something with the Connection
 
         } catch (SQLException ex) {
             // handle any errors
@@ -816,7 +751,6 @@ public class DBComm {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
     }
-
 
     /**
      * pass debugging
@@ -850,10 +784,6 @@ public class DBComm {
         }
 
 
-    }
-
-    public static LinkedList<String> getCities(){
-        return null;
     }
 
     public static void insertBill(Bill b){
@@ -983,10 +913,54 @@ public class DBComm {
         return filteredCustomers;
     }
 
+    public static LinkedList<String> getAllCountries(){
 
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
 
+            LinkedList<String> countries = new LinkedList<>();
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery("SELECT * FROM tariff_country");
+            while(d.next()){
+                countries.add(d.getString("country_name"));
 
+            }
+            return countries;
 
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return null;
+    }
 
+    public static LinkedList<String> getAllCities(){
 
+        Connection conn = null;
+        try {
+            conn =
+                    DriverManager.getConnection("jdbc:mysql://localhost/smartgrid?" +
+                            "user=root&password=root");
+
+            LinkedList<String> cities = new LinkedList<>();
+            Statement st = conn.createStatement();
+            ResultSet d = st.executeQuery("SELECT * FROM tariff_city");
+            while(d.next()){
+                cities.add(d.getString("city_name"));
+            }
+            return cities;
+
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        }
+        return null;
+    }
 }

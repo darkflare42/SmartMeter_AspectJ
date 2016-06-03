@@ -90,6 +90,7 @@ public aspect DiagnosticsDebuggingAspect {
     }
 
     void around(PowerMeter m) : MeterRemoved(m){
+        System.out.println("IN DIAGNOSTICS METER REMOVED");
         init();
         Connection conn = null;
         try {
@@ -143,6 +144,7 @@ public aspect DiagnosticsDebuggingAspect {
     }
 
     void around(PowerMeter m) : MeterUpdated(m){
+        System.out.println("IN DIAGNOSTICS METER UPDATED");
         init();
 
         Connection conn = null;
@@ -214,6 +216,7 @@ public aspect DiagnosticsDebuggingAspect {
     }
 
     void around() : UpdateCustomerBilling(){
+        System.out.println("IN DIAGNOSTICS CUSTOMER BILL UPDATED");
         //In diagnostics mode this function goes over all the meters and sets the meter to active
         //As well as calculating the bill to the customer (and adds it to the DB)
         LinkedList<Customer> customers = DBComm.getAllCustomers();

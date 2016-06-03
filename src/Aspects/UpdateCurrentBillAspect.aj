@@ -37,9 +37,9 @@ public aspect UpdateCurrentBillAspect {
      */
     pointcut FineCustomer() : execution(* Engine.BillingEngine.checkMonthlyBilling());
 
-    pointcut CityTariffChanged(String country, String city, int newTariff) :
-                                execution(* Engine.DBComm.changeCityTariff(String, String, int)) &&
-                                args(country, city, newTariff); //TODO: Add to DBComm
+    pointcut CityTariffChanged(String city, int newTariff) :
+                                execution(* Engine.DBComm.updateCityTariff(String, int)) &&
+                                args(city, newTariff);
 
 
     /**
@@ -90,8 +90,8 @@ public aspect UpdateCurrentBillAspect {
      * This advice occurs after chaning a city's's tariff. We go through all of the current active bills and update
      * the tariff according to the new value
      */
-    after(String country, String city, int newTariff) :  CityTariffChanged(country, city, newTariff){
-        LinkedList<Customer> customers = DBComm.getCustomersFromCity(country, city);
+    after(String city, int newTariff) :  CityTariffChanged(city, newTariff){
+        LinkedList<Customer> customers = DBComm.getCustomersFromCity("IL", city);
         updateCityTariffForCustomers(customers, newTariff);
     }
 

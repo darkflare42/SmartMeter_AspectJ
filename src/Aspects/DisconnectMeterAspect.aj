@@ -1,8 +1,8 @@
 package Aspects;
 import Engine.*;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * There are a lot of places in the code which deal with disconnecting/specifically changing the status of a meter
@@ -11,18 +11,20 @@ import java.util.List;
  */
 public aspect DisconnectMeterAspect {
 
+    private static final int MAX_CITY_WATTAGE = 10000;
+    private static final int CUTOFF_DATE = 120;
 
     /**
      * This pointcut is when a client has disconnected from the company, we have to delete all his
      * meter's from the DB
      */
-    pointcut ClientDisconnected(Customer c) : call(* Engine.DBComm.deleteCustomer(Customer)) && args(c);
+    pointcut ClientDisconnected(Customer c) : execution(* Engine.DBComm.deleteCustomer(Customer)) && args(c);
 
     /**
      * This pointcut should happen after calling to the function which returns all the customers
      * Who have not payed their bill
      */
-    pointcut ClientBillNotPayed() : call(* Engine.BillingEngine.checkMonthlyBilling());
+    pointcut ClientBillNotPayed() : execution(* Engine.BillingEngine.checkMonthlyBilling());
 
     /**
      * When a meter reaches his max wattage then we need to deal with it - in this case setting the meter
@@ -33,7 +35,7 @@ public aspect DisconnectMeterAspect {
     /**
      * When a region is overloaded, we need to inactivate all meters
      */
-    pointcut MeterWattageOverload(): call(* Engine.MeterCommunication.readAllMeters());
+    pointcut MeterWattageOverload(): execution(* Engine.MeterCommunication.readAllMeters());
 
     /**
      * This advice should check the wattage returned and if the wattage is over the max wattage, the meter
@@ -53,7 +55,6 @@ public aspect DisconnectMeterAspect {
      * get all the meters he has and then as delete them from the DB
      */
     before(Customer c) : ClientDisconnected(c){
-        //TODO: Interference with SendReportAspect - the report needs to be sent after calculating the currentbill
         BillingEngine.calculateCurrentBill(c);
         LinkedList<PowerMeter> userMeters = DBComm.getAllMeterdByUserId(c.getID());
         for(PowerMeter m : userMeters){
@@ -67,8 +68,7 @@ public aspect DisconnectMeterAspect {
      * if it is - it sets all the meters to INACTIVE
      */
     after() : MeterWattageOverload(){
-        //List<String> cities = DBComm.getCities(); //TODO: Add to DBComm (maybe filter according to country)
-        List<String> cities = new LinkedList<>();
+        LinkedList<String> cities = DBComm.getAllCities();
         for(String city : cities){
             checkAndHandleOverload(city);
         }
@@ -83,23 +83,45 @@ public aspect DisconnectMeterAspect {
             cityWattage += m.getCurrentWattage();
         }
 
-        if(cityWattage >= 10000){ //TODO: Constant
+        if(cityWattage >= MAX_CITY_WATTAGE){
             cityActiveMeters.forEach(PowerMeter::setInactive);
         }
     }
 
     /**
-     * This Advicde occurs after a successful return of the function which returns all the customers
+     * This Advice occurs after a successful return of the function which returns all the customers
      * who have not payed their monthly bill. Their meters need to be set as INACTIVE
      */
-    after() returning(List<Customer> customers) : ClientBillNotPayed(){
-        //TODO: Add some logic in here, where it looks in the DB to see if the client has not payed the bill for 3 months ago. If he has, then disconnect all the meters
-
-        for(Customer c: customers){
-            List<PowerMeter> clientMeters = DBComm.getAllMeterdByUserId(c.getID());
-            clientMeters.forEach(PowerMeter::setInactive);
+    after() : ClientBillNotPayed(){
+        Calendar currDate = new GregorianCalendar();
+        LinkedList<Bill> allBills = DBComm.getAllBills();
+        for(Bill b : allBills){
+            if(b.getPayed()) continue;
+            Date cutOffDate = b.getCutoffDate();
+            long daysDiff =  getDateDiff(currDate.getTime(), cutOffDate, TimeUnit.DAYS);
+            if(daysDiff >= CUTOFF_DATE){ //We check if the bill has passed the maximum number of cutoff days
+                disconnectAllMeters(b.getCustomer());
+            }
         }
+    }
 
+    /**
+     * Get a diff between two dates
+     * @param date1 the oldest date
+     * @param date2 the newest date
+     * @param timeUnit the unit in which you want the diff
+     * @return the diff value, in the provided unit
+     */
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+    }
+
+    public static void disconnectAllMeters(Customer c){
+        LinkedList<PowerMeter> meters = DBComm.getAllMeterdByUserId(c.getID());
+        for(PowerMeter m : meters){
+            m.setInactive();
+        }
     }
 
 

@@ -1,5 +1,7 @@
 package Engine;
 
+import com.sun.xml.internal.ws.api.pipe.Engine;
+
 import java.util.Date;
 
 /**
@@ -15,6 +17,7 @@ public class PowerMeter {
     private Customer m_currCustomer;
     private int m_currWattageReading;
     private int m_totalReading;
+    private EngineConsts.MeterStatus m_currStatus;
 
 
 
@@ -25,6 +28,7 @@ public class PowerMeter {
         m_currCustomer = null;
         m_lastReadDate= startDate;
         m_currWattageReading = 10;
+        m_currStatus = EngineConsts.MeterStatus.ACTIVE;
     }
 
     public PowerMeter(int id, Date startDate, Customer customer) {
@@ -32,6 +36,7 @@ public class PowerMeter {
         m_startDate = startDate;
         m_lastReadDate= startDate;
         m_currCustomer = customer;
+        m_currStatus = EngineConsts.MeterStatus.ACTIVE;
     }
 
     public PowerMeter(int id,boolean active, Date init_date, Date lastRead, int maxWattage, int totalWattage, int currentWattage, Customer cust){
@@ -43,10 +48,7 @@ public class PowerMeter {
         this. m_currWattageReading = currentWattage;
         this.m_totalReading = totalWattage;
         this.m_currCustomer =cust;
-
-
-
-
+        m_currStatus = EngineConsts.MeterStatus.ACTIVE;
     }
 
 
@@ -101,10 +103,13 @@ public class PowerMeter {
 
     public void setActive(){
         m_active = true;
+        m_currStatus = EngineConsts.MeterStatus.ACTIVE;
     }
 
     public void setInactive(){
         m_active = false;
+        m_currStatus = EngineConsts.MeterStatus.INACTIVE;
+
     }
 
     public int getCurrentWattage(){
@@ -121,5 +126,8 @@ public class PowerMeter {
         m_currWattageReading=wattage;
     }
 
+    public EngineConsts.MeterStatus getStatus(){
+        return m_currStatus;
+    }
 
 }
