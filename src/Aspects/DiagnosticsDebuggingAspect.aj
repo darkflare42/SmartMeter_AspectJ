@@ -6,9 +6,9 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-/** This aspect is used to allow using the system in a sandbox
- * every major operation that the user can do will not be saved in the static DB, but in a temporary DB
- * Created by Or Keren on 27/05/2016.
+/** This aspect is used to allow using the system in a sandbox.
+ * Some major operations that the user can do will be different when in this diagnostics/debugging mode. This aspect
+ * defines the behaviour of these functions
  */
 public aspect DiagnosticsDebuggingAspect {
 
@@ -25,12 +25,24 @@ public aspect DiagnosticsDebuggingAspect {
     pointcut NewMeterAdded(PowerMeter newMeter): execution(* DBComm.addNewMeter(PowerMeter)) &&
                                             args(newMeter) && if(MainTest.diagnosticsMode);
 
+    /**
+     * This pointcut occurs when a meter is removed from the system, again it only occurs when the system is in
+     * diagnostics mode
+     */
     pointcut MeterRemoved(PowerMeter m): execution(* DBComm.deletePowerMeter(PowerMeter)) &&
                                             args(m) && if(MainTest.diagnosticsMode);
 
+    /**
+     * This pointcut occurs when a meter is updated in the system, again it only occurs when the system is in
+     * diagnostics mode
+     */
     pointcut MeterUpdated(PowerMeter m) : execution(* DBComm.updateMeter(PowerMeter)) &&
                                             args(m) && if(MainTest.diagnosticsMode);
 
+    /**
+     * This pointcut occurs when on a monthly basis - when checkMonthlyBilling is called. We use this to update
+     * the current billing according to diagnostic rules, rather than real life rules
+     */
     pointcut UpdateCustomerBilling() : execution(* BillingEngine.checkMonthlyBilling()) &&
                                             if(MainTest.diagnosticsMode);
 
@@ -89,6 +101,11 @@ public aspect DiagnosticsDebuggingAspect {
         return;
     }
 
+    /**
+     * This advice "takes over" the remove meter function and does its own version of delete
+     * In this scenario we add the deleted meter to a special DB Table which records the deleted meters during
+     * debugging (for restoring purposes)
+     */
     void around(PowerMeter m) : MeterRemoved(m){
         System.out.println("IN DIAGNOSTICS METER REMOVED");
         init();
@@ -143,6 +160,11 @@ public aspect DiagnosticsDebuggingAspect {
         return;
     }
 
+    /**
+     * This advice "takes over" the update meter function and does its own version of update
+     * Like the delete method, we save the previous meter data to a special backup table, to make sure we can
+     * restore the data easily if we want to
+     */
     void around(PowerMeter m) : MeterUpdated(m){
         System.out.println("IN DIAGNOSTICS METER UPDATED");
         init();
@@ -215,6 +237,13 @@ public aspect DiagnosticsDebuggingAspect {
         return;
     }
 
+
+    /**
+     * This advice "takes over" the update billing function and does its own version of it
+     * Instead of calculating the customer's billing, this goes over all meter's and sets them to active.
+     * It also calculates the current bill and saves it, so in this case we are adding functionality instead of
+     * completely changing it
+     */
     void around() : UpdateCustomerBilling(){
         System.out.println("IN DIAGNOSTICS CUSTOMER BILL UPDATED");
         //In diagnostics mode this function goes over all the meters and sets the meter to active
@@ -238,7 +267,9 @@ public aspect DiagnosticsDebuggingAspect {
         return;
     }
 
-
+    /**
+     * A helper function used for DB initialization
+     */
     public static void init(){
         if (!initExecuted){
             initExecuted = true;
@@ -253,6 +284,11 @@ public aspect DiagnosticsDebuggingAspect {
         }
     }
 
+    /**
+     * A helper function for getting a Meter from the DB via its ID
+     * @param meterId The id of the meter to get
+     * @return The PowerMeter from the DB
+     */
     public static PowerMeter getMeterById(int meterId){
         Connection conn = null;
         try {
@@ -279,7 +315,7 @@ public aspect DiagnosticsDebuggingAspect {
             int currentWattage = d.getInt(8);
             System.out.println(currentWattage);
             System.out.println("userid"+userId);
-            Customer cus =getCustumerById(userId);
+            Customer cus =getCustomerById(userId);
             System.out.println("$$$");
             PowerMeter pm = new PowerMeter(meterId,active,init_Date,lastRead,maxWattate,totalWattage,currentWattage,cus);
             System.out.println("$$$ff");
@@ -295,8 +331,12 @@ public aspect DiagnosticsDebuggingAspect {
         return null;
     }
 
-
-    public static Customer getCustumerById(int userId){
+    /**
+     * A helper function for getting a Customer from the DB via its ID
+     * @param userId The id of the customer to get
+     * @return The customer object
+     */
+    public static Customer getCustomerById(int userId){
         Connection conn = null;
         try {
             conn =
@@ -325,6 +365,13 @@ public aspect DiagnosticsDebuggingAspect {
         return null;
     }
 
+    /**
+     * A Helper function for inserting billing information to the DB
+     * @param userId The id of the user for which billing needs to be inserted
+     * @param currentBill The current billing amount
+     * @param lastDateToPay The last date the user can pay for it
+     * @param payedBool Has he payed?
+     */
     public static void insertDataBill(int userId, int currentBill, java.util.Date lastDateToPay, boolean payedBool) {
         Connection conn = null;
         try {

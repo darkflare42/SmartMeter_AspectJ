@@ -35,6 +35,7 @@ public class LoginScreen extends JFrame{
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int x;
 //                if(DBComm.login(userName.getText(), new String(password.getPassword()))){
 //                    MainTest.currentUser = DBComm.getUser(userName.getText());
 //                    MainTest.currentUser.openMainMenu(); //This opens up the main menu that is appropriate for the current user type

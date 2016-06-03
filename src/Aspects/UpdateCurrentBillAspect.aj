@@ -12,8 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  *  This aspect deals with updating the current billing of all the customers in the system
- *
- * Created by Or Keren on 21/05/2016.
  */
 public aspect UpdateCurrentBillAspect {
 
@@ -26,7 +24,7 @@ public aspect UpdateCurrentBillAspect {
     pointcut MeterReadingChanged() : execution(* Engine.PowerMeter.readWattage());
 
     /**
-     * Whenever a country's tariff changes - the
+     * Whenever a country's tariff changes - the current billing information for the user should be updated
      */
     pointcut CountryTariffChanged(String country, int newTariff) :
                                  execution(* Engine.DBComm.updateCountryTariff(String, int)) &&
@@ -37,6 +35,9 @@ public aspect UpdateCurrentBillAspect {
      */
     pointcut FineCustomer() : execution(* Engine.BillingEngine.checkMonthlyBilling());
 
+    /**
+     * This pointcut occurs when a city's tariff is changed
+     */
     pointcut CityTariffChanged(String city, int newTariff) :
                                 execution(* Engine.DBComm.updateCityTariff(String, int)) &&
                                 args(city, newTariff);
@@ -72,10 +73,6 @@ public aspect UpdateCurrentBillAspect {
 
     }
 
-    private int calculateDateDifference(Calendar currDate, Calendar issuedDate){
-        int diffYear = currDate.get(Calendar.YEAR) - issuedDate.get(Calendar.YEAR);
-        return diffYear * 12 + currDate.get(Calendar.MONTH) - issuedDate.get(Calendar.MONTH);
-    }
 
     /**
      * This advice occurs after chaning a country's tariff. We go through all of the current active bills and update
@@ -95,6 +92,11 @@ public aspect UpdateCurrentBillAspect {
         updateCityTariffForCustomers(customers, newTariff);
     }
 
+    /**
+     * A helper function for updating a customer's bill in the event that a tariff for a city has been changed
+     * @param customers The customers to change the bill
+     * @param newTariff The new tariff
+     */
     private void updateCityTariffForCustomers(LinkedList<Customer> customers, int newTariff){
         for(Customer c : customers){
             Bill b = DBComm.getBillByCustomerID(c.getID());
@@ -103,6 +105,11 @@ public aspect UpdateCurrentBillAspect {
         }
     }
 
+    /**
+     * A helper function for updating a customer's bill in the event that a tariff for a country has been changed
+     * @param customers The customers to change the bill
+     * @param newTariff The new tariff
+     */
     private void updateCountryTariffForCustomers(LinkedList<Customer> customers, int newTariff){
         for(Customer c: customers){
             Bill b = DBComm.getBillByCustomerID(c.getID());

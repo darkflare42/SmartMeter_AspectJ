@@ -6,8 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * There are a lot of places in the code which deal with disconnecting/specifically changing the status of a meter
- * to INACTIVE
- * Created by Or Keren on 21/05/2016.
+ * to INACTIVE. This aspect deals with these situations
  */
 public aspect DisconnectMeterAspect {
 
@@ -75,7 +74,12 @@ public aspect DisconnectMeterAspect {
     }
 
 
-
+    /**
+     * A helper function for checking and handling if a city is overloaded
+     * This is for testing purposes only, and is not reflective of how or where the function is located in the
+     * real life system
+     * @param city The city to check the overloaded status
+     */
     private void checkAndHandleOverload(String city){
         int cityWattage = 0;
         List<PowerMeter> cityActiveMeters = DBComm.getAllMetersByCity(city);
@@ -117,6 +121,10 @@ public aspect DisconnectMeterAspect {
         return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * A helper function that disconnects all of a client's meters
+     * @param c The customer's meters
+     */
     public static void disconnectAllMeters(Customer c){
         LinkedList<PowerMeter> meters = DBComm.getAllMeterdByUserId(c.getID());
         for(PowerMeter m : meters){

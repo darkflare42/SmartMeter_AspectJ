@@ -25,10 +25,7 @@ public class MeterCommunication implements Runnable{
      */
     @Override
     public void run() {
-
         readAllMeters();
-
-        //Go over the list of meters and call "readMeter" function on it
         try {
             Thread.sleep(MainTest.METER_INTERVAL);
         } catch (InterruptedException e) {
@@ -50,14 +47,20 @@ public class MeterCommunication implements Runnable{
      * @param m
      */
     public void removeMeter(PowerMeter m){
-        //TODO: Add function to meter that "inactivates" it
-        m_currMeters.remove(m); //TODO: Check that this works, maybe we need to search via ID
+        m_currMeters.remove(m);
     }
 
     public void readAllMeters(){
-        //Engine.DBComm.updateMeterReading(m.getID, watt);
         m_currMeters.forEach(PowerMeter::readWattage);
-        //TODO: Add function to DBCOMM to update the current reading of a meter (id & reading)
+        for(PowerMeter m : m_currMeters){
+            int watt = m.readWattage();
+            DBComm.updateMeter(m);
+        }
 
+
+    }
+
+    public void overloadFixed(String cs){
+        //Does something
     }
 }
