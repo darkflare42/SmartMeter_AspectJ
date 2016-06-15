@@ -12,9 +12,12 @@ import java.util.Date;
  */
 public aspect DiagnosticsDebuggingAspect {
 
-    private static Connection con;
-    private static boolean initExecuted = false;
-    private static int DiagnosticsCustomerID = -9999;
+    /**
+     * Static private members for the Aspect
+     */
+    private static Connection con; //For DB connection
+    private static boolean initExecuted = false; //Has the db connection been initiated
+    private static int DiagnosticsCustomerID = -9999; //A default customer ID for diagnostical purposes
 
 
     /**

@@ -10,8 +10,11 @@ import java.util.concurrent.TimeUnit;
  */
 public aspect DisconnectMeterAspect {
 
-    private static final int MAX_CITY_WATTAGE = 10000;
-    private static final int CUTOFF_DATE = 120;
+    /**
+     * Members for the aspect
+     */
+    private static final int MAX_CITY_WATTAGE = 10000; //The default max wattage for a city
+    private static final int CUTOFF_DATE = 120; //The num of days before cutting off a customer
 
     /**
      * This pointcut is when a client has disconnected from the company, we have to delete all his
@@ -36,18 +39,6 @@ public aspect DisconnectMeterAspect {
      */
     pointcut MeterWattageOverload(): execution(* Engine.MeterCommunication.readAllMeters());
 
-    /**
-     * This advice should check the wattage returned and if the wattage is over the max wattage, the meter
-     * should be Disconnected (i.e set to INACTIVE)
-     */
-    after() returning(int watt) : MeterWattageMaxed(){
-        PowerMeter currMeter =((PowerMeter)thisJoinPoint.getTarget());
-        int maxWattage = currMeter.getMaxWattage();
-        if(watt >= maxWattage){
-            currMeter.setInactive();
-            DBComm.updateMeter(currMeter);
-        }
-    }
 
     /**
      * This advice occurs before a client is removed from the DB. We need to calculate the current bill,
@@ -58,6 +49,36 @@ public aspect DisconnectMeterAspect {
         LinkedList<PowerMeter> userMeters = DBComm.getAllMeterdByUserId(c.getID());
         for(PowerMeter m : userMeters){
             DBComm.deletePowerMeter(m);
+        }
+    }
+
+    /**
+     * This Advice occurs after a successful return of the function which returns all the customers
+     * who have not payed their monthly bill. Their meters need to be set as INACTIVE
+     */
+    after() : ClientBillNotPayed(){
+        Calendar currDate = new GregorianCalendar();
+        LinkedList<Bill> allBills = DBComm.getAllBills();
+        for(Bill b : allBills){
+            if(b.getPayed()) continue;
+            Date cutOffDate = b.getCutoffDate();
+            long daysDiff =  getDateDiff(currDate.getTime(), cutOffDate, TimeUnit.DAYS);
+            if(daysDiff >= CUTOFF_DATE){ //We check if the bill has passed the maximum number of cutoff days
+                disconnectAllMeters(b.getCustomer());
+            }
+        }
+    }
+
+    /**
+     * This advice should check the wattage returned and if the wattage is over the max wattage, the meter
+     * should be Disconnected (i.e set to INACTIVE)
+     */
+    after() returning(int watt) : MeterWattageMaxed(){
+        PowerMeter currMeter =((PowerMeter)thisJoinPoint.getTarget());
+        int maxWattage = currMeter.getMaxWattage();
+        if(watt >= maxWattage){
+            currMeter.setInactive();
+            DBComm.updateMeter(currMeter);
         }
     }
 
@@ -93,30 +114,13 @@ public aspect DisconnectMeterAspect {
     }
 
     /**
-     * This Advice occurs after a successful return of the function which returns all the customers
-     * who have not payed their monthly bill. Their meters need to be set as INACTIVE
-     */
-    after() : ClientBillNotPayed(){
-        Calendar currDate = new GregorianCalendar();
-        LinkedList<Bill> allBills = DBComm.getAllBills();
-        for(Bill b : allBills){
-            if(b.getPayed()) continue;
-            Date cutOffDate = b.getCutoffDate();
-            long daysDiff =  getDateDiff(currDate.getTime(), cutOffDate, TimeUnit.DAYS);
-            if(daysDiff >= CUTOFF_DATE){ //We check if the bill has passed the maximum number of cutoff days
-                disconnectAllMeters(b.getCustomer());
-            }
-        }
-    }
-
-    /**
      * Get a diff between two dates
      * @param date1 the oldest date
      * @param date2 the newest date
      * @param timeUnit the unit in which you want the diff
      * @return the diff value, in the provided unit
      */
-    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+    private static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
         long diffInMillies = date2.getTime() - date1.getTime();
         return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
@@ -125,19 +129,11 @@ public aspect DisconnectMeterAspect {
      * A helper function that disconnects all of a client's meters
      * @param c The customer's meters
      */
-    public static void disconnectAllMeters(Customer c){
+    private static void disconnectAllMeters(Customer c){
         LinkedList<PowerMeter> meters = DBComm.getAllMeterdByUserId(c.getID());
         for(PowerMeter m : meters){
             m.setInactive();
         }
     }
-
-
-
-
-
-
-
-
 
 }

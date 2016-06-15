@@ -1,7 +1,8 @@
 package Aspects;
-import com.sun.xml.internal.ws.api.pipe.Engine;
 
 import java.sql.*;
+import java.util.LinkedList;
+
 import Engine.*;
 import Engine.DBComm;
 
@@ -19,41 +20,42 @@ public aspect SendReportAspect {
     pointcut CustomerDisconnected(Customer user):execution (* Engine.DBComm.deleteCustomer(Customer)) && args(user);
 
     /**
+     * This pointcut occurs on a monthly basis. We go through all the customers, retrieve the bill and send it to them
+     */
+    pointcut FirstOfMonth():execution(* Engine.BillingEngine.checkMonthlyBilling());
+
+    /**
      * This advice runs before the execution of the function, takes the current bill for the customer and sends
      * it to him
      */
     before(Customer user): CustomerDisconnected(user) {
-        System.out.println("CustomerDisconnected");
-        ResultSet d = DBComm.getDataFromBillByUserId(user.getID());
-        try {
-            d.next();
-            int bill = d.getInt(1);
-            BillingEngine.sendBillingReportByMail(bill, user);
-        }
-        catch(Exception ex){
-            return;
-        }
+        sendReportsForCustomer(user.getID());
     }
-
-    /**
-     * This pointcut occurs on a monthly basis. We go through all the customers, retrieve the bill and send it to them
-     */
-    pointcut FirstOfMonth():execution(* Engine.BillingEngine.checkMonthlyBilling());
 
     /**
      * The advice occurs after the function is called by the BillingEngine, since BillingEngine calculates the bill
      * and this advice will then send the updated, calculated bill to the customer
      */
     after(): FirstOfMonth() {
-        ResultSet d = DBComm.getDataFromBillByUserId(MainTest.currentUser.getID());
+        LinkedList<Customer> allCustomers = DBComm.getAllCustomers();
+        for(Customer c : allCustomers){
+            sendReportsForCustomer(c.getID());
+        }
+    }
+
+    /**
+     * Helper fuction, goes over all of a customer's bills, and sends them to the customer via mail & e-mail
+     * @param customerID The customer ID to send bills to
+     */
+    private void sendReportsForCustomer(int customerID){
+        ResultSet d = DBComm.getDataFromBillByUserId(customerID);
         try {
             d.next();
             int bill = d.getInt(1);
             BillingEngine.sendBillingReportByMail(bill, MainTest.currentUser);
         }
-        catch(Exception ex){
+        catch(NullPointerException| SQLException ex2){
             return;
         }
-
     }
 }

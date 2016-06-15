@@ -24,7 +24,7 @@ public aspect ActivateMeterAspect {
      * This pointcut is for reactivating meters that have max wattage set - we need to reset the wattage reading
      * and also activate meters that have been inactivated because they reached max wattage
      */
-    pointcut ReactivatePrepaid() : execution(* BillingEngine.FirstOfMonth());
+    pointcut ReactivatePrepaid() : execution(* BillingEngine.checkMonthlyBilling());
 
 
     /**
@@ -62,7 +62,6 @@ public aspect ActivateMeterAspect {
         }
     }
 
-
     /**
      * The advice occurs after the function has been called. We go over all meter's that are prepaid (have a max
      * wattage of value different than -1), reset their current reading and set them as active
@@ -84,13 +83,5 @@ public aspect ActivateMeterAspect {
     after(int newWattage,PowerMeter pm): MeterMaxWattageIncreased(newWattage,pm){
         pm.setActive();
     }
-
-
-
-
-
-
-
-
 
 }
