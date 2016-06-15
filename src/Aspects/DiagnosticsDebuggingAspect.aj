@@ -240,7 +240,6 @@ public aspect DiagnosticsDebuggingAspect {
         return;
     }
 
-
     /**
      * This advice "takes over" the update billing function and does its own version of it
      * Instead of calculating the customer's billing, this goes over all meter's and sets them to active.
@@ -273,7 +272,7 @@ public aspect DiagnosticsDebuggingAspect {
     /**
      * A helper function used for DB initialization
      */
-    public static void init(){
+    private static void init(){
         if (!initExecuted){
             initExecuted = true;
             try {
@@ -292,7 +291,7 @@ public aspect DiagnosticsDebuggingAspect {
      * @param meterId The id of the meter to get
      * @return The PowerMeter from the DB
      */
-    public static PowerMeter getMeterById(int meterId){
+    private static PowerMeter getMeterById(int meterId){
         Connection conn = null;
         try {
             conn =
@@ -339,7 +338,7 @@ public aspect DiagnosticsDebuggingAspect {
      * @param userId The id of the customer to get
      * @return The customer object
      */
-    public static Customer getCustomerById(int userId){
+    private static Customer getCustomerById(int userId){
         Connection conn = null;
         try {
             conn =
@@ -375,7 +374,7 @@ public aspect DiagnosticsDebuggingAspect {
      * @param lastDateToPay The last date the user can pay for it
      * @param payedBool Has he payed?
      */
-    public static void insertDataBill(int userId, int currentBill, java.util.Date lastDateToPay, boolean payedBool) {
+    private static void insertDataBill(int userId, int currentBill, java.util.Date lastDateToPay, boolean payedBool) {
         Connection conn = null;
         try {
             conn =
@@ -402,8 +401,5 @@ public aspect DiagnosticsDebuggingAspect {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
     }
-
-
-
 
 }
