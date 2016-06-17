@@ -22,12 +22,10 @@ public class MainTest {
     public static boolean diagnosticsMode = false;
 
     public static void main(String[] args) {
-        //LoginScreen ls = new LoginScreen();
-        communicator = new MeterCommunication();
-        //   System.out.println(DBComm.getCountryTaarif("maaldge"));
-        Calendar currDate = new GregorianCalendar();
+        //Sample testing code
 
-        //  currentUser =new Administrator();
+        communicator = new MeterCommunication();
+        Calendar currDate = new GregorianCalendar();
 
 
         //Create New Customer
@@ -64,42 +62,16 @@ public class MainTest {
         orPM.setMaxWattage(850);
         DBComm.updateMeter(orPM);
 
-                //Delete one of the meters
+        //Delete one of the meters
         DBComm.deletePowerMeter(orPM);
 
 
-
-        //Bill b = new Bill(cs,35,null,null);
-        //  BillingEngine.FirstOfMonth();
-        //  BillingEngine.PayBill(cs, b);
-        // Communicator.overloadFixed("dfg");
-
-
-        System.out.println(pm.getIsActive());
-        DBComm.updateCityTariff("test", 1);
-
-        pm.setMaxWattage(10);
-        System.out.println(pm.getIsActive());
-        //DisconnectMeterAspect.disconnectAllMeters(cs);
-        // BillingEngine.checkMonthlyBilling();
-        //DBComm.deleteCustomer(cs);
-        // diagnosticsMode = true;
-        //DBComm.deletePowerMeter(m);
-//        m.readWattage();
-        //DBComm.addNewMeter(m);
-//        DBComm.getMeterById(23);
-
-
-//        Address d=new Address("234","234","234","234",2);
-//        Customer n= new Customer("sfd","@43",234,d);
-//        DBComm.getAllMeterdByUserId(1);
-//       DBComm.insertDataBill(5,5,new Date(),true);
 
 
     }
 
     public static void shutdown(){
-
+        //Mock function for simulating shutdown
     }
 }
 
